@@ -9,3 +9,8 @@ export * as Flights from './flights';
 export * as Gherkin from './gherkin';
 export * as Microservices from './microservices';
 export * from './Aviator';
+
+export const platforms = {
+    dotnet: "dotnet",
+    javascript: "javascript"
+};
