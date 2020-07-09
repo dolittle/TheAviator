@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScenarioFor } from '../ScenarioFor';
-import { SpecificationBuilder } from '../SpecificationBuilder';
+import { ScenarioFor, SpecificationBuilder } from '../';
 import { MyContext } from './MyContext';
 
 

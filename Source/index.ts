@@ -11,6 +11,6 @@ export * as Microservices from './microservices';
 export * from './Aviator';
 
 export const platforms = {
-    dotnet: "dotnet",
-    javascript: "javascript"
+    dotnet: 'dotnet',
+    javascript: 'javascript'
 };

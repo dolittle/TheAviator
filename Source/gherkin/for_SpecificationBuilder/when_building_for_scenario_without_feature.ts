@@ -1,9 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ScenarioFor } from '../ScenarioFor';
-import { SpecificationBuilder } from '../SpecificationBuilder';
-import { FeatureDefinition } from '../FeatureDefinition';
+import { ScenarioFor, SpecificationBuilder, FeatureDefinition } from '../';
 import { MyContext } from './MyContext';
 
 class ScenarioWithoutFeature extends ScenarioFor<MyContext> {
