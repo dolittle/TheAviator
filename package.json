@@ -18,7 +18,7 @@
     "files": [
         "Distribution",
         "cleanup.sh",
-        "Source/**"
+        "Source"
     ],
     "main": "Distribution/index.js",
     "typings": "Distribution/index.d.ts",
@@ -35,8 +35,8 @@
         "prepublish": "yarn test && yarn test:clean"
     },
     "dependencies": {
-        "@dolittle/rudiments": "^2.0.18",
-        "@dolittle/rules": "^2.0.18",
+        "@dolittle/rudiments": "^3.0.0",
+        "@dolittle/rules": "^3.0.0",
         "@types/async": "^3.2.0",
         "@types/byline": "^4.2.31",
         "@types/chalk": "^2.2.0",
