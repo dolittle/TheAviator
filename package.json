@@ -17,7 +17,8 @@
     "homepage": "https://github.com/dolittle/TheAviator#readme",
     "files": [
         "Distribution",
-        "cleanup.sh"
+        "cleanup.sh",
+        "Source/**"
     ],
     "main": "Distribution/index.js",
     "typings": "Distribution/index.d.ts",
