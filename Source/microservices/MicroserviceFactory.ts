@@ -70,11 +70,11 @@ export class MicroserviceFactory implements IMicroserviceFactory {
         const containerOptions = {
             name: uniqueName,
             friendlyName: name,
-            image: image,
-            tag: tag,
-            exposedPorts: exposedPorts,
-            networkName: networkName,
-            mounts: mounts
+            image,
+            tag,
+            exposedPorts,
+            networkName,
+            mounts
         } as ContainerOptions;
 
         const container = this._containerEnvironment.createContainer(containerOptions);

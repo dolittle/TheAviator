@@ -11,5 +11,5 @@ export class ScenarioInProcedure<T extends ScenarioContext> {
      * Percentage of scenario in procedure - 0 means the system will distribute it evenly.
      * Default is 0
      */
-    percentage: number = 0;
+    percentage = 0;
 }

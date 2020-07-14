@@ -7,7 +7,7 @@ export class FlightSimulationOptions {
     duration!: Duration;
     warmUpPeriod!: Duration;
     coolOffPeriod!: Duration;
-    maximumSimultaneousActors: number = 1;
-    minimumIntervalForBehaviors: number = 1000;
-    maximumIntervalForBehaviors: number = 10000;
+    maximumSimultaneousActors = 1;
+    minimumIntervalForBehaviors = 1000;
+    maximumIntervalForBehaviors = 10000;
 }

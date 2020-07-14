@@ -45,8 +45,7 @@ export class SpecificationRunner implements ISpecificationRunner {
                     let brokenRulesForThen: BrokenRule[];
                     if (brokenRulesByThens.hasOwnProperty(subject.then)) {
                         brokenRulesForThen = brokenRulesByThens[subject.then];
-                    }
-                    else {
+                    } else {
                         brokenRulesForThen = [];
                         brokenRulesByThens[subject.then] = brokenRulesForThen;
                     }

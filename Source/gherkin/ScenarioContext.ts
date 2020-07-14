@@ -9,9 +9,9 @@ export abstract class ScenarioContext {
     private _environment: ScenarioEnvironment = ScenarioEnvironment.empty;
     readonly microservices: { [key: string]: MicroserviceInContext } = {};
 
-    abstract async describe(environment: ScenarioEnvironmentDefinition): Promise<void>;
+    abstract async describe (environment: ScenarioEnvironmentDefinition): Promise<void>;
 
-    abstract async cleanup(): Promise<void>;
+    abstract async cleanup (): Promise<void>;
 
     get environment() { return this._environment; }
 

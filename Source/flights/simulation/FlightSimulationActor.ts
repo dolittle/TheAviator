@@ -7,7 +7,7 @@ import { ISpecificationRunner } from '../../gherkin';
 import chalk from 'chalk';
 
 export class FlightSimulationActor {
-    private _running: boolean = false;
+    private _running = false;
 
     constructor(
         private _plan: FlightSimulationPlan,

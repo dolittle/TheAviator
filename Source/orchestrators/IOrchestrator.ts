@@ -5,5 +5,5 @@ import { Guid } from '@dolittle/rudiments';
 
 export interface IOrchestrator {
     createPod(runId: Guid): string
-    createRun(): IRunContext 
+    createRun(): IRunContext
 }

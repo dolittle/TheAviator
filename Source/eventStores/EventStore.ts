@@ -35,8 +35,8 @@ export class EventStore implements IEventStore {
             const collection = client.db(eventStoresForTenants[0].database).collection(collectionName);
 
             const query = {
-                'EventProcessor': MUUID.from(eventProcessorId.toString()),
-                'SourceStream': MUUID.from(sourceStreamId.toString())
+                EventProcessor: MUUID.from(eventProcessorId.toString()),
+                SourceStream: MUUID.from(sourceStreamId.toString())
             };
 
             const result = await collection.findOne(query);
@@ -94,8 +94,7 @@ export class EventStore implements IEventStore {
             const result = await collection.find(filter).toArray();
             await client.close();
             return result;
-        }
-        catch (ex) {
+        } catch (ex) {
             return [];
         }
     }

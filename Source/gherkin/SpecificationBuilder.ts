@@ -37,7 +37,7 @@ export class SpecificationBuilder implements ISpecificationBuilder {
         }
         const keys = this.getKeysFor(description);
         const specification: Specification = {
-            feature: feature,
+            feature,
             givens: [],
             when: this.getWhenFrom(description, keys),
             ands: this.getAndsFrom(description, keys),
