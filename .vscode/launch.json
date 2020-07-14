@@ -8,27 +8,10 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/Source/TheAviator/index.ts",
-            "outFiles": ["${workspaceFolder}/Source/TheAviator/out/**/*.js"],
-            "preLaunchTask": "tsc: build - Source/TheAviator/tsconfig.json",
-            "cwd": "${workspaceFolder}/Source/TheAviator",
-        },
-        {
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Source/Head/bin/Debug/netcoreapp3.1/Head.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Source/Head",
-            "console": "internalConsole",
-            "stopAtEntry": false
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "program": "${workspaceFolder}/Distribution/index.ts",
+            "outFiles": ["${workspaceFolder}/Distribution/**/*.js"],
+            "preLaunchTask": "tsc: build - ./tsconfig.json",
+            "cwd": "${workspaceFolder}",
         }
     ]
 }
