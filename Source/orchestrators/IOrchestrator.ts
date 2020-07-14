@@ -1,8 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IContainer } from './IContainer';
+import { Guid } from '@dolittle/rudiments';
 
-export interface IWaitStrategy {
-    wait(container: IContainer): Promise<void>;
+export interface IOrchestrator {
+    createPod(runId: Guid): string
+    createRun(): IRunContext 
 }
