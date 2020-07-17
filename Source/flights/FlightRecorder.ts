@@ -6,16 +6,15 @@ import * as path from 'path';
 
 import { ISerializer } from '../ISerializer';
 
-import { IContainer } from '../containers';
+import {  } from '../orchestrators';
 import { Microservice } from '../microservices';
 
 import { Scenario, ScenarioResult, ScenarioEnvironmentDefinition, ScenarioEnvironment, ScenarioContext } from '../gherkin';
 
-import { ScenarioResult as ReportingScenarioResult } from './reporting';
+import { ScenarioResult as ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter } from './reporting';
 
 import { Flight } from './Flight';
 import { IFlightRecorder } from './IFlightRecorder';
-import { IScenarioConverter, IScenarioResultConverter } from './reporting';
 import { Subject } from 'rxjs';
 
 export class FlightRecorder implements IFlightRecorder {
@@ -74,13 +73,13 @@ export class FlightRecorder implements IFlightRecorder {
 
     private collectLogsFor(environment: ScenarioEnvironment) {
         Object.values(environment.microservices).forEach(microservice => {
-            microservice.head.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
-            microservice.runtime.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
-            microservice.eventStoreStorage.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
+            microservice.head.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
+            microservice.runtime.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
+            microservice.eventStoreStorage.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
         });
     }
 
-    private getOutputStreamWriterFor(microservice: Microservice, container: IContainer) {
+    private getOutputStreamWriterFor(microservice: Microservice, container: any) {
         return (data: Buffer) => {
             const filtered = data.filter(_ => (_ === 0xA || _ === 0xD) || _ >= 0x20 && (_ < 0x80 || _ >= 0xA0));
 

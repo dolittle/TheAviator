@@ -31,6 +31,7 @@ export class MicroserviceActions implements IMicroserviceActions {
                 this.getUrlForCommittingEvents(tenantId, eventSource, false),
                 events);
         } catch (ex) {
+
         }
     }
 

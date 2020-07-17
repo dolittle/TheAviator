@@ -27,11 +27,11 @@ export class StreamProcessorShouldBeFailing implements IRule<ScenarioWithThenSub
             });
         } catch (ex) {
             if (!state) {
-                context.fail(this, subject, MissingStreamProcessorState.withArguments({
+                context.fail(this, subject, MissingStreamProcessorState.becauseOf({
                     processor: this._eventProcessorId.toString()
                 }));
             } else {
-                context.fail(this, subject, StreamProcessorIsNotFailing.withArguments({
+                context.fail(this, subject, StreamProcessorIsNotFailing.becauseOf({
                     processor: this._eventProcessorId.toString()
                 }));
             }

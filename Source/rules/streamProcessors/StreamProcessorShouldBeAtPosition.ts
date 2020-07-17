@@ -26,11 +26,11 @@ export class StreamProcessorShouldBeAtPosition implements IRule<ScenarioWithThen
             });
         } catch (ex) {
             if (!state) {
-                context.fail(this, subject, MissingStreamProcessorState.withArguments({
+                context.fail(this, subject, MissingStreamProcessorState.becauseOf({
                     processor: this._eventProcessorId.toString()
                 }));
             } else {
-                context.fail(this, subject, StreamProcessorPositionIsWrong.withArguments({
+                context.fail(this, subject, StreamProcessorPositionIsWrong.becauseOf({
                     expectedPosition: this._position,
                     actualPosition: state.Position,
                     processor: this._eventProcessorId.toString()

@@ -6,7 +6,7 @@ import { SpecificationResult } from './SpecificationResult';
 import { ISpecificationRunner } from './ISpecificationRunner';
 import { ScenarioContext } from './ScenarioContext';
 import { ScenarioFor } from './ScenarioFor';
-import { ScenarioWithThenSubject } from 'rules';
+import { ScenarioWithThenSubject } from '../rules';
 import { ThenResult } from './ThenResult';
 import { BrokenRule } from '@dolittle/rules';
 

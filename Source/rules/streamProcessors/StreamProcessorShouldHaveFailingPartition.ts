@@ -27,15 +27,15 @@ export class StreamProcessorShouldHaveFailingPartition implements IRule<Scenario
             });
         } catch (ex) {
             if (!state) {
-                context.fail(this, subject, MissingStreamProcessorState.withArguments({
+                context.fail(this, subject, MissingStreamProcessorState.becauseOf({
                     processor: this._eventProcessorId.toString()
                 }));
             } else if (!this.streamProcessorIsFailing(state)) {
-                context.fail(this, subject, StreamProcessorIsNotFailing.withArguments({
+                context.fail(this, subject, StreamProcessorIsNotFailing.becauseOf({
                     processor: this._eventProcessorId.toString()
                 }));
             } else {
-                context.fail(this, subject, StreamProcessorDoesNotHaveFailingPartition.withArguments({
+                context.fail(this, subject, StreamProcessorDoesNotHaveFailingPartition.becauseOf({
                     processor: this._eventProcessorId.toString(),
                     partition: this._partitionId
                 }));

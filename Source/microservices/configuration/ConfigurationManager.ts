@@ -8,7 +8,7 @@ import * as Handlebars from 'handlebars';
 import { MicroserviceConfiguration } from '../';
 
 import { IConfigurationManager } from './IConfigurationManager';
-import { Mount } from '../../containers';
+import { Mount } from '../../orchestrators';
 
 const HeadConfig = 'head';
 const RuntimeConfig = 'runtime';

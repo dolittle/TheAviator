@@ -8,8 +8,14 @@
         "**/.DS_Store": true,
         "**/out": true
     },
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.alwaysShowStatus": true,
     "cSpell.words": [
         "Dockerode",
-        "promisify"
+        "promisify",
+        "Kube"
     ]
 }

@@ -3,7 +3,7 @@
 
 export * as Banner from './Banner';
 
-export * as Containers from './containers';
+export * as Orchestrators from './orchestrators';
 export * as EventStores from './eventStores';
 export * as Flights from './flights';
 export * as Gherkin from './gherkin';

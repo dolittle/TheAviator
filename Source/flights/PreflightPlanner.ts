@@ -3,13 +3,18 @@
 
 import { Constructor } from '@dolittle/rudiments';
 
-import { ScenarioFor, ISpecificationBuilder, ScenarioContext, ScenarioEnvironment } from '../gherkin';
-
-import { Scenario, ScenarioEnvironmentDefinition } from '../gherkin';
+import {
+    ScenarioFor,
+    ISpecificationBuilder,
+    ScenarioContext,
+    ScenarioEnvironment,
+    Scenario,
+    ScenarioEnvironmentDefinition,
+    IScenarioEnvironmentBuilder
+} from '../gherkin';
 
 import { IPreflightPlanner } from './IPreflightPlanner';
 import { PreflightChecklist } from './PreflightChecklist';
-import { IScenarioEnvironmentBuilder } from '../gherkin';
 
 export class PreflightPlanner implements IPreflightPlanner {
 

@@ -36,9 +36,9 @@ export class EventWithContentShouldBeInStream implements IRule<ScenarioWithThenS
             });
         } catch (ex) {
             if (eventsToLookFor.length === 1) {
-                context.fail(this, subject, EventIsMissing.noArguments());
+                context.fail(this, subject, EventIsMissing.justBecause());
             } else {
-                context.fail(this, subject, EventsAreMissing.withArguments({ desired: eventsToLookFor.length, actual: eventsFound }));
+                context.fail(this, subject, EventsAreMissing.becauseOf({ desired: eventsToLookFor.length, actual: eventsFound }));
             }
         }
     }

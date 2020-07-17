@@ -4,7 +4,7 @@
 
 import { RuleSetContainerEvaluation, BrokenRule } from '@dolittle/rules';
 import { IMicroserviceActions, Microservice } from '../microservices';
-import { IContainer } from '../containers';
+import {  } from '../orchestrators';
 import { StreamProcessorRuleSetContainerBuilder } from '../rules/streamProcessors';
 import { EventLogRuleSetContainerBuilder, StreamsRuleSetContainerBuilder } from '../rules/streams';
 import { ScenarioRuleSetContainerBuilder } from '../rules';
@@ -22,15 +22,15 @@ export class MicroserviceInContext {
         this.streams = new StreamsRuleSetContainerBuilder(this.microservice);
     }
 
-    get head(): IContainer {
+    get head(): any {
         return this.microservice.head;
     }
 
-    get runtime(): IContainer {
+    get runtime(): any {
         return this.microservice.runtime;
     }
 
-    get eventStoreStorage(): IContainer {
+    get eventStoreStorage(): any {
         return this.microservice.eventStoreStorage;
     }
 

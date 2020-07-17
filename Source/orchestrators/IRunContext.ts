@@ -1,10 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 import { Guid } from '@dolittle/rudiments';
-import { IRunContext } from './IRunContext';
+import { IPod } from './IPod';
 
-export interface IOrchestrator {
-    createPod(runId: Guid): string
-    createRun(): IRunContext
+export interface IRunContext {
+    readonly id: Guid;
+    readonly pods: IPod;
+
 }

@@ -3,31 +3,26 @@
 
 import * as path from 'path';
 
-import { ContainerOptions, IContainer, IContainerEnvironment, Mount } from '../containers';
-
 import { Microservice } from './Microservice';
 import { IMicroserviceFactory } from './IMicroserviceFactory';
 import { MicroserviceConfiguration } from './configuration/MicroserviceConfiguration';
 import { IConfigurationManager } from './configuration/IConfigurationManager';
 import { MicroserviceDefinition } from './MicroserviceDefinition';
+import { Mount } from '../orchestrators';
 
 export class MicroserviceFactory implements IMicroserviceFactory {
 
     constructor(
-        private _containerEnvironment: IContainerEnvironment,
         private _configurationManager: IConfigurationManager) {
     }
 
     async create(workingDirectory: string, configuration: MicroserviceConfiguration): Promise<Microservice> {
-        await this._containerEnvironment.createNetwork(configuration.networkName);
-
         const eventStoreStorage = await this.configureContainer(
             'mongo',
             configuration.mongoHost,
             'dolittle/mongodb',
             'latest',
             [27017],
-            configuration.networkName,
             [{
                 host: path.join(workingDirectory, '_microservices', configuration.name, 'backup'),
                 container: '/backup'
@@ -40,9 +35,7 @@ export class MicroserviceFactory implements IMicroserviceFactory {
             `dolittle/integrationtests-head-${configuration.platform}`,
             '5.0.0-rc.3',
             [5000],
-            configuration.networkName,
-            this._configurationManager.generateForHead(configuration, workingDirectory)
-        );
+            []);
 
         const runtime = await this.configureContainer(
             'runtime',
@@ -50,12 +43,9 @@ export class MicroserviceFactory implements IMicroserviceFactory {
             'dolittle/runtime',
             '5.0.0-rc.2',
             [81, 9700, 50052, 50053],
-            configuration.networkName,
-            this._configurationManager.generateForRuntime(configuration, workingDirectory)
-        );
+            []);
 
-        const microservice = new Microservice(configuration, this._containerEnvironment, head, runtime, eventStoreStorage);
-        return microservice;
+        return new Microservice(configuration, {} as any, head, runtime, eventStoreStorage);
     }
 
     async configureContainer(
@@ -64,8 +54,7 @@ export class MicroserviceFactory implements IMicroserviceFactory {
         image: string,
         tag: string,
         exposedPorts: number[],
-        networkName: string,
-        mounts?: Mount[]): Promise<IContainer> {
+        mounts: Mount[]): Promise<any> {
 
         const containerOptions = {
             name: uniqueName,
@@ -73,13 +62,8 @@ export class MicroserviceFactory implements IMicroserviceFactory {
             image,
             tag,
             exposedPorts,
-            networkName,
             mounts
-        } as ContainerOptions;
-
-        const container = this._containerEnvironment.createContainer(containerOptions);
-        await container.configure();
-
-        return container;
+        };
+        return {};
     }
 }

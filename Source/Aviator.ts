@@ -7,9 +7,6 @@ import { Serializer } from './Serializer';
 
 import { IMicroserviceFactory, MicroserviceFactory } from './microservices';
 
-import { IContainerEnvironment } from './containers';
-import { ContainerEnvironment } from './containers/docker';
-
 import {
     FlightRecorder,
     FlightInspection,
@@ -48,7 +45,7 @@ import { FlightSimulationPlanner } from './flights/simulation/FlightSimulationPl
 export class Aviator {
     readonly platform: string;
     readonly serializer: ISerializer;
-    readonly containerFactory: IContainerEnvironment;
+    // readonly containerFactory: IContainerEnvironment;
     readonly microserviceFactory: IMicroserviceFactory;
     readonly configurationManager: IConfigurationManager;
     readonly specificationBuilder: ISpecificationBuilder;
@@ -61,11 +58,11 @@ export class Aviator {
     private constructor(platform: string) {
         this.platform = platform;
         this.serializer = new Serializer();
-        this.containerFactory = new ContainerEnvironment();
+        // this.containerFactory = new ContainerEnvironment();
         this.configurationManager = new ConfigurationManager();
         this.specificationBuilder = new SpecificationBuilder();
         this.specificationRunner = new SpecificationRunner();
-        this.microserviceFactory = new MicroserviceFactory(this.containerFactory, this.configurationManager);
+        this.microserviceFactory = new MicroserviceFactory(this.configurationManager);
         this.specificationConverter = new SpecificationConverter();
         this.scenarioConverter = new ScenarioConverter(this.specificationConverter);
         this.specificationResultConverter = new SpecificationResultConverter(this.specificationConverter);

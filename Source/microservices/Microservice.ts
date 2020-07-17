@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IContainer, LogMessageWaitStrategy, IContainerEnvironment } from '../containers';
+import {  } from '../orchestrators';
 
 import { IMicroserviceActions } from './IMicroserviceActions';
 import { MicroserviceActions } from './MicroserviceActions';
@@ -10,18 +10,18 @@ import { IEventStore, EventStore } from '../eventStores';
 
 export class Microservice {
     readonly configuration: MicroserviceConfiguration;
-    readonly head: IContainer;
-    readonly runtime: IContainer;
-    readonly eventStoreStorage: IContainer;
+    readonly head: any;
+    readonly runtime: any;
+    readonly eventStoreStorage: any;
     readonly actions: IMicroserviceActions;
     readonly eventStore: IEventStore;
 
     constructor(
         configuration: MicroserviceConfiguration,
-        private _containerEnvironment: IContainerEnvironment,
-        head: IContainer,
-        runtime: IContainer,
-        eventStoreStorage: IContainer) {
+        private _containerEnvironment: any,
+        head: any,
+        runtime: any,
+        eventStoreStorage: any) {
 
         this.configuration = configuration;
         this.head = head;
@@ -32,9 +32,9 @@ export class Microservice {
     }
 
     async start() {
-        await this.eventStoreStorage.start(new LogMessageWaitStrategy('waiting for connections on port 27017'));
-        await this.runtime.start(new LogMessageWaitStrategy('Application started.'));
-        await this.head.start(new LogMessageWaitStrategy('Connected to runtime'));
+        // await this.eventStoreStorage.start(new LogMessageWaitStrategy('waiting for connections on port 27017'));
+        // await this.runtime.start(new LogMessageWaitStrategy('Application started.'));
+        // await this.head.start(new LogMessageWaitStrategy('Connected to runtime'));
     }
 
     async stop() {

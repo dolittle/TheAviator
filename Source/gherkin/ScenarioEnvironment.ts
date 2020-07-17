@@ -9,7 +9,7 @@ import { Microservice } from '../microservices';
 import { ScenarioEnvironmentDefinition } from './ScenarioEnvironmentDefinition';
 import { IFlightPaths } from '../flights';
 import { Scenario } from './Scenario';
-import { IContainer } from '../containers';
+import {  } from '../orchestrators';
 import { ISerializer } from '../ISerializer';
 
 const eventStoreDumpFolderName = 'eventStore';
@@ -99,12 +99,12 @@ export class ScenarioEnvironment {
         for (const microservice of Object.values(this.microservices)) {
             const microservicePath = this._flightPaths.forMicroservice(microservice);
 
-            const writeOptionsFile = (container: IContainer) => {
-                const containerOptionsFile = path.join(microservicePath, `${container.options.friendlyName}${containerOptionsFileExtension}`);
-                const configOutput = JSON.parse(JSON.stringify(container.options));
+            const writeOptionsFile = (something: any) => {
+                const containerOptionsFile = path.join(microservicePath, `${something.options.friendlyName}${containerOptionsFileExtension}`);
+                const configOutput = JSON.parse(JSON.stringify(something.options));
 
                 configOutput.boundPorts = {};
-                for (const [k, v] of container.boundPorts) {
+                for (const [k, v] of something.boundPorts) {
                     configOutput.boundPorts[k] = v;
                 }
                 fs.writeFileSync(containerOptionsFile, this._serializer.toJSON(configOutput));
