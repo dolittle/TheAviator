@@ -34,6 +34,14 @@ export class MicroserviceInContext {
         return this.microservice.actions;
     }
 
+    get ruleSetContainerBuilders(): MicroserviceRuleSetContainerBuilder[] {
+        return [
+            this.event_log,
+            this.stream_processors,
+            this.streams
+        ];
+    }
+
     async evaluate(): Promise<BrokenRule[]> {
         let brokenRules: BrokenRule[] = [];
 
