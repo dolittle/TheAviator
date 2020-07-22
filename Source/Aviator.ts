@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/rudiments';
-import { ISerializer } from './ISerializer';
-import { Serializer } from './Serializer';
+import { ISerializer } from './index';
+import { Serializer } from './index';
 
-import { IMicroserviceFactory, MicroserviceFactory } from './microservices';
+import { IMicroserviceFactory, MicroserviceFactory, IConfigurationManager, ConfigurationManager, Platform } from './microservices';
 
 import {
     FlightRecorder,
@@ -13,10 +13,21 @@ import {
     Flight,
     PreflightPlanner,
     FlightPaths,
-    FlightReporter
+    FlightReporter,
+    FlightSimulationOptions,
+    IFlightSimulationProcedure,
+    FlightSimulation,
+    FlightSimulator
+    IScenarioConverter,
+    IScenarioResultConverter,
+    ScenarioConverter,
+    ISpecificationConverter,
+    SpecificationConverter,
+    ScenarioResultConverter,
+    SpecificationResultConverter,
+    ISpecificationResultConverter,
+    FlightSimulationPlanner
 } from './flights';
-
-import { IConfigurationManager, ConfigurationManager } from './microservices/configuration';
 
 import {
     ScenarioContext,
@@ -27,23 +38,9 @@ import {
     SpecificationRunner,
     ScenarioEnvironmentBuilder
 } from './gherkin';
-
-import { FlightSimulationOptions, IFlightSimulationProcedure, FlightSimulation, FlightSimulator } from './flights/simulation';
-
-import {
-    IScenarioConverter,
-    IScenarioResultConverter,
-    ScenarioConverter,
-    ISpecificationConverter,
-    SpecificationConverter,
-    ScenarioResultConverter,
-    SpecificationResultConverter,
-    ISpecificationResultConverter
-} from './flights/reporting';
-import { FlightSimulationPlanner } from './flights/simulation/FlightSimulationPlanner';
+import { Platform } from './microservices/Platform';
 
 export class Aviator {
-    readonly platform: string;
     readonly serializer: ISerializer;
     // readonly containerFactory: IContainerEnvironment;
     readonly microserviceFactory: IMicroserviceFactory;
@@ -55,8 +52,7 @@ export class Aviator {
     readonly specificationConverter: ISpecificationConverter;
     readonly specificationResultConverter: ISpecificationResultConverter;
 
-    private constructor(platform: string) {
-        this.platform = platform;
+    private constructor(public readonly platform: Platform) {
         this.serializer = new Serializer();
         // this.containerFactory = new ContainerEnvironment();
         this.configurationManager = new ConfigurationManager();
@@ -69,7 +65,7 @@ export class Aviator {
         this.scenarioResultConverter = new ScenarioResultConverter(this.specificationResultConverter);
     }
 
-    static getFor(platform: string) {
+    static getFor(platform: Platform) {
         return new Aviator(platform);
     }
 

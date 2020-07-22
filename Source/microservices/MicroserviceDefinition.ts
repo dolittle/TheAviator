@@ -3,6 +3,12 @@
 
 import { Guid } from '@dolittle/rudiments';
 
+/**
+ * Represents the definition of a microservice.
+ *
+ * @export
+ * @class MicroserviceDefinition
+ */
 export class MicroserviceDefinition {
     readonly identifier: Guid;
     readonly name: string;
@@ -15,6 +21,11 @@ export class MicroserviceDefinition {
         this.tenants = tenants;
     }
 
+    /**
+     * Adds a producer to the microservice definition.
+     *
+     * @param {MicroserviceDefinition} consumer
+     */
     addProducer(consumer: MicroserviceDefinition) {
         this.producers.push(consumer);
     }

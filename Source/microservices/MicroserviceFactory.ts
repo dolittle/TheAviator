@@ -3,19 +3,24 @@
 
 import * as path from 'path';
 
-import { Microservice } from './Microservice';
-import { IMicroserviceFactory } from './IMicroserviceFactory';
-import { MicroserviceConfiguration } from './configuration/MicroserviceConfiguration';
-import { IConfigurationManager } from './configuration/IConfigurationManager';
-import { MicroserviceDefinition } from './MicroserviceDefinition';
-import { Mount } from '../orchestrators';
+import { Mount } from '../k8s';
+import { Microservice, IMicroserviceFactory } from './';
+import { MicroserviceConfiguration, IConfigurationManager } from './configuration';
 
+/**
+ * Represents an implementation of IMicroserviceFactory.
+ *
+ * @export
+ * @class MicroserviceFactory
+ * @implements {IMicroserviceFactory}
+ */
 export class MicroserviceFactory implements IMicroserviceFactory {
 
     constructor(
         private _configurationManager: IConfigurationManager) {
     }
 
+    /** @inheritdoc */
     async create(workingDirectory: string, configuration: MicroserviceConfiguration): Promise<Microservice> {
         const eventStoreStorage = await this.configureContainer(
             'mongo',
@@ -41,13 +46,14 @@ export class MicroserviceFactory implements IMicroserviceFactory {
             'runtime',
             configuration.runtime.host,
             'dolittle/runtime',
-            '5.0.0-rc.2',
+            '5.0.1',
             [81, 9700, 50052, 50053],
             []);
 
         return new Microservice(configuration, {} as any, head, runtime, eventStoreStorage);
     }
 
+    /** @inheritdoc */
     async configureContainer(
         name: string,
         uniqueName: string,

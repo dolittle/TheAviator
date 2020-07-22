@@ -3,11 +3,11 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { EventWithContentShouldBeInStream } from './EventWithContentShouldBeInStream';
-import { Microservice } from '../../microservices/Microservice';
-
-import { ScenarioRuleSetContainerBuilder } from '../ScenarioRuleSetContainerBuilder';
+import { EventWithContentShouldBeInStream } from './';
+import { Microservice } from '../../microservices';
 import { EventObject } from '../../microservices/shared/EventObject';
+
+import { ScenarioRuleSetContainerBuilder } from '../';
 
 export class EventLogRuleSetContainerBuilder extends ScenarioRuleSetContainerBuilder {
     constructor(microservice: Microservice) {

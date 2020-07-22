@@ -1,14 +1,23 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Flight } from './Flight';
-import { IFlightInspection } from './IFlightInspection';
 import { ISpecificationRunner, ScenarioResult, Scenario, ScenarioEnvironment } from '../gherkin';
+import { IFlightInspection, Flight } from './index';
 
+/**
+ * Represents an implementation of IFlightInspection.
+ *
+ * @export
+ * @class FlightInspection
+ * @implements {IFlightInspection}
+ */
 export class FlightInspection implements IFlightInspection {
     constructor(private _flight: Flight, private _specificationRunner: ISpecificationRunner) {
     }
 
+    /**
+     * @inheritdoc
+     */
     async runPreflightCheck(): Promise<void> {
         for (const [environment, scenarios] of this._flight.preflightChecklist.scenariosByEnvironment) {
             this._flight.environment.next(environment);

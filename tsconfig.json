@@ -1,9 +1,15 @@
 {
     "extends": "@dolittle/typescript.config",
     "compilerOptions": {
-        "target": "ES2016",
+        "target": "ES2018",
         "module": "CommonJS",
-        "outDir": "./Distribution"
+        "outDir": "./Distribution",
+        "rootDir": "./Source",
+        "sourceRoot": "./Source",
+        "composite": false,
+        "incremental": false,
+        "watch": false
+
     },
     "include": ["Source/**/*.ts"],
     "exclude": ["node_modules", "Distribution"]

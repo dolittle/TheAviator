@@ -7,6 +7,13 @@ import { Microservice } from '../../microservices';
 import { StreamProcessorShouldBeFailing, StreamProcessorShouldBeAtPosition, StreamProcessorShouldHaveFailingPartition } from './';
 import { ScenarioRuleSetContainerBuilder } from '../';
 
+/**
+ * Represents a rule set container builder for stream processors
+ *
+ * @export
+ * @class StreamProcessorRuleSetContainerBuilder
+ * @extends {ScenarioRuleSetContainerBuilder}
+ */
 export class StreamProcessorRuleSetContainerBuilder extends ScenarioRuleSetContainerBuilder {
     constructor(microservice: Microservice) {
         super(microservice);

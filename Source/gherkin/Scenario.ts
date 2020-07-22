@@ -2,11 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import humanReadable from '../humanReadable';
-import { ScenarioEnvironment } from './ScenarioEnvironment';
-import { Specification } from './Specification';
-import { ScenarioFor } from './ScenarioFor';
-import { ScenarioContext } from './ScenarioContext';
-import { ScenarioEnvironmentDefinition } from './ScenarioEnvironmentDefinition';
+import { ScenarioEnvironment, ScenarioContext, ScenarioEnvironmentDefinition, ScenarioFor, Specification } from './';
 
 class no_context extends ScenarioContext {
     async describe(environment: ScenarioEnvironmentDefinition): Promise<void> {

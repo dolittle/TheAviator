@@ -4,19 +4,26 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { ISerializer } from '../ISerializer';
 
-import {  } from '../orchestrators';
+import { Subject } from 'rxjs';
+
+import {  } from '../k8s';
 import { Microservice } from '../microservices';
 
 import { Scenario, ScenarioResult, ScenarioEnvironmentDefinition, ScenarioEnvironment, ScenarioContext } from '../gherkin';
 
 import { ScenarioResult as ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter } from './reporting';
+import { ISerializer } from '../index';
 
-import { Flight } from './Flight';
-import { IFlightRecorder } from './IFlightRecorder';
-import { Subject } from 'rxjs';
+import { Flight, IFlightRecorder } from './index';
 
+/**
+ * Represents an implementation of IFlightRecorder.
+ *
+ * @export
+ * @class FlightRecorder
+ * @implements {IFlightRecorder}
+ */
 export class FlightRecorder implements IFlightRecorder {
     private _currentScenario: Scenario;
     private _colorRemoverRegEx: RegExp;
@@ -40,12 +47,14 @@ export class FlightRecorder implements IFlightRecorder {
         this._currentScenario = _flight.scenario.getValue();
     }
 
+    /** @inheritdoc */
     conclude() {
         const json = this._serializer.toJSON(this._scenarioResultsPerContext);
         const resultFilePath = path.join(this._flight.paths.base, 'results.json');
         fs.writeFileSync(resultFilePath, json);
     }
 
+    /** @inheritdoc */
     async resultsFor(result: ScenarioResult) {
         const reportingResult = this._scenarioResultConverter.convert(result);
         const currentScenarioPathPath = this._flight.paths.forScenario(result.scenario);
@@ -61,7 +70,7 @@ export class FlightRecorder implements IFlightRecorder {
         this.scenarioResult.next(reportingResult);
     }
 
-
+    /** @inheritdoc */
     async captureMetricsFor(scenario: Scenario) {
         scenario.environment.forEachMicroservice(async microservice => {
             const currentScenarioPath = this._flight.paths.forMicroserviceInScenario(scenario, microservice);

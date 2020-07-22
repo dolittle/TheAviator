@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/rudiments';
-import { ScenarioContext } from './ScenarioContext';
+import { ScenarioContext } from './';
 
 export interface IContextDescriptorFor<T extends ScenarioContext> {
     for: Constructor<T>;

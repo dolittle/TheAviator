@@ -5,13 +5,21 @@ import { retry } from 'async';
 
 import { Guid } from '@dolittle/rudiments';
 import { IRule, IRuleContext } from '@dolittle/rules';
-import { ScenarioWithThenSubject } from '../ScenarioWithThenSubject';
-import { MissingStreamProcessorState, StreamProcessorPositionIsWrong } from './rules';
+import { ScenarioWithThenSubject } from '../';
+import { MissingStreamProcessorState, StreamProcessorPositionIsWrong } from './';
 
+/**
+ * Represents an implementation of IRule for ScenarioWithThenSubject for whether a stream processor is at a position.
+ *
+ * @export
+ * @class StreamProcessorShouldBeAtPosition
+ * @implements {IRule<ScenarioWithThenSubject>}
+ */
 export class StreamProcessorShouldBeAtPosition implements IRule<ScenarioWithThenSubject> {
     constructor(private _tenantId: Guid, private _eventProcessorId: Guid, private _scopeId: Guid, private _position: number) {
     }
 
+    /** @inheritdoc */
     async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject) {
         let state: any;
 

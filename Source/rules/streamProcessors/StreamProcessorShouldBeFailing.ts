@@ -5,14 +5,21 @@ import { retry } from 'async';
 
 import { Guid } from '@dolittle/rudiments';
 import { IRule, IRuleContext } from '@dolittle/rules';
-import { ScenarioWithThenSubject } from '../ScenarioWithThenSubject';
-import { MissingStreamProcessorState, StreamProcessorIsNotFailing } from './rules';
+import { ScenarioWithThenSubject } from '../';
+import { MissingStreamProcessorState, StreamProcessorIsNotFailing } from './';
 
-
+/**
+ * Represents an implementation of IRule for ScenarioWithThenSubject for when a stream processor should be failing.
+ *
+ * @export
+ * @class StreamProcessorShouldBeFailing
+ * @implements {IRule<ScenarioWithThenSubject>}
+ */
 export class StreamProcessorShouldBeFailing implements IRule<ScenarioWithThenSubject> {
     constructor(private _tenantId: Guid, private _eventProcessorId: Guid, private _scopeId: Guid) {
     }
 
+    /** @inheritdoc */
     async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject) {
         let state: any;
 

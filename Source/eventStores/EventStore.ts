@@ -6,23 +6,39 @@ import path from 'path';
 
 import { MongoClient, FilterQuery, Decimal128 } from 'mongodb';
 import MUUID from 'uuid-mongodb';
-
 import { Guid } from '@dolittle/rudiments';
 
-import { IEventStore } from './IEventStore';
+import { IEventStore } from './index';
 import { Microservice } from '../microservices';
 
+/**
+ * Represents an implementation of IEventStore.
+ *
+ * @export
+ * @class EventStore
+ * @implements {IEventStore}
+ */
 export class EventStore implements IEventStore {
     readonly microservice: Microservice;
 
+    /**
+     * Creates an instance of EventStore.
+     * @param {Microservice} microservice
+     */
     constructor(microservice: Microservice) {
         this.microservice = microservice;
     }
 
+    /**
+     * @inheritdoc
+     */
     async findEvents(tenantId: Guid, stream: string, filter: FilterQuery<any>): Promise<any[]> {
         return this.findDocumentsInCollection(tenantId, stream, filter);
     }
 
+    /**
+     * @inheritdoc
+     */
     async getStreamProcessorState(tenantId: Guid, eventProcessorId: Guid, scopeId: Guid, sourceStreamId: Guid): Promise<any> {
         try {
             const eventStoresForTenants = this.microservice.configuration.eventStoreForTenants.filter(_ => _.tenantId);
@@ -47,6 +63,9 @@ export class EventStore implements IEventStore {
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     async dump(destination: string): Promise<string[]> {
         const backups: string[] = [];
         for (const eventStoreForTenant of this.microservice.configuration.eventStoreForTenants) {
@@ -67,6 +86,9 @@ export class EventStore implements IEventStore {
         return backups;
     }
 
+    /**
+     * @inheritdoc
+     */
     async clear(): Promise<void> {
         try {
             const client = await this.getMongoClient();

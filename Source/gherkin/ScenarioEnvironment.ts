@@ -3,13 +3,11 @@
 
 import fs from 'fs';
 import path from 'path';
-import { promisify } from 'util';
 
 import { Microservice } from '../microservices';
 import { ScenarioEnvironmentDefinition } from './ScenarioEnvironmentDefinition';
 import { IFlightPaths } from '../flights';
 import { Scenario } from './Scenario';
-import {  } from '../orchestrators';
 import { ISerializer } from '../ISerializer';
 
 const eventStoreDumpFolderName = 'eventStore';

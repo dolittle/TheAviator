@@ -4,7 +4,6 @@
 
 import { RuleSetContainerEvaluation, BrokenRule } from '@dolittle/rules';
 import { IMicroserviceActions, Microservice } from '../microservices';
-import {  } from '../orchestrators';
 import { StreamProcessorRuleSetContainerBuilder } from '../rules/streamProcessors';
 import { EventLogRuleSetContainerBuilder, StreamsRuleSetContainerBuilder } from '../rules/streams';
 import { ScenarioRuleSetContainerBuilder } from '../rules';

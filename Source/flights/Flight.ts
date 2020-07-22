@@ -3,12 +3,15 @@
 
 import { BehaviorSubject } from 'rxjs';
 
-import { PreflightChecklist } from './PreflightChecklist';
-import { IFlightRecorder } from './IFlightRecorder';
-import { IFlightPaths } from './IFlightPaths';
-
 import { Scenario, ScenarioEnvironment, ScenarioEnvironmentDefinition } from '../gherkin';
+import { IFlightPaths, IFlightRecorder, PreflightChecklist } from './index';
 
+/**
+ * Represents a flight with a PreflightChecklist to perform.
+ *
+ * @export
+ * @class Flight
+ */
 export class Flight {
     private _recorder: IFlightRecorder | undefined;
     private _flightPaths: IFlightPaths;
@@ -28,10 +31,22 @@ export class Flight {
         this.scenario = new BehaviorSubject<Scenario>(Scenario.none);
     }
 
+    /**
+     * Gets the flight paths.
+     *
+     * @readonly
+     * @type {IFlightPaths}
+     */
     get paths(): IFlightPaths {
         return this._flightPaths;
     }
 
+    /**
+     * Gets the flight recorder.
+     *
+     * @readonly
+     * @type {IFlightRecorder}
+     */
     get recorder(): IFlightRecorder {
         if (this._recorder) {
             return this._recorder;
@@ -39,6 +54,11 @@ export class Flight {
         throw new Error('Flight recorder is not configured for flight');
     }
 
+    /**
+     * Sets the flight recorder of this Flight.
+     *
+     * @param {IFlightRecorder} recorder
+     */
     setRecorder(recorder: IFlightRecorder) {
         this._recorder = recorder;
     }

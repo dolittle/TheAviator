@@ -1,14 +1,22 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IFlightReporter } from './IFlightReporter';
-import { ScenarioResult } from './reporting';
-import { Flight } from './Flight';
-import { Scenario, ScenarioEnvironment } from '../gherkin';
-
 import chalk from 'chalk';
 
+import { Scenario, ScenarioEnvironment } from '../gherkin';
+import { ScenarioResult } from './reporting';
+import { Flight, IFlightReporter } from './index';
+
+/**
+ * Represents an implementation of IFlightReporter.
+ *
+ * @export
+ * @class FlightReporter
+ * @implements {IFlightReporter}
+ */
 export class FlightReporter implements IFlightReporter {
+
+    /** @inheritdoc */
     observe(flight: Flight): void {
         flight.scenario.subscribe(this.outputScenario);
         flight.environment.subscribe(this.outputEnvironment);

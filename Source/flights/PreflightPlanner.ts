@@ -13,15 +13,23 @@ import {
     IScenarioEnvironmentBuilder
 } from '../gherkin';
 
-import { IPreflightPlanner } from './IPreflightPlanner';
-import { PreflightChecklist } from './PreflightChecklist';
+import { Platform } from '../microservices';
+import { IPreflightPlanner, PreflightChecklist } from './index';
 
+/**
+ * Represents an implementation of IPreflightPlanner.
+ *
+ * @export
+ * @class PreflightPlanner
+ * @implements {IPreflightPlanner}
+ */
 export class PreflightPlanner implements IPreflightPlanner {
 
     constructor(private _scenarioEnvironmentBuilder: IScenarioEnvironmentBuilder, private _specificationBuilder: ISpecificationBuilder) {
     }
 
-    async createChecklistFor(platform: string, ...scenarios: Constructor<ScenarioFor<ScenarioContext>>[]): Promise<PreflightChecklist> {
+    /** @inheritdoc */
+    async createChecklistFor(platform: Platform, ...scenarios: Constructor<ScenarioFor<ScenarioContext>>[]): Promise<PreflightChecklist> {
         const scenarioEnvironmentsByContextType: Map<Constructor<ScenarioContext>, ScenarioEnvironment> = new Map();
         const scenarioContextsByContextType: Map<Constructor<ScenarioContext>, ScenarioContext> = new Map();
         const scenariosByEnvironments: Map<ScenarioEnvironment, Scenario[]> = new Map();

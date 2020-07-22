@@ -5,14 +5,21 @@ import { retry } from 'async';
 import { Guid } from '@dolittle/rudiments';
 import { IRule, IRuleContext } from '@dolittle/rules';
 
-import { ScenarioWithThenSubject } from '../ScenarioWithThenSubject';
-import { MissingStreamProcessorState, StreamProcessorIsNotFailing, StreamProcessorDoesNotHaveFailingPartition } from './rules';
+import { ScenarioWithThenSubject } from '../';
+import { MissingStreamProcessorState, StreamProcessorIsNotFailing, StreamProcessorDoesNotHaveFailingPartition } from './';
 
-
+/**
+ * Represents an implementation of IRule for ScenarioWithThenSubject for when a stream processor should have failing partition
+ *
+ * @export
+ * @class StreamProcessorShouldHaveFailingPartition
+ * @implements {IRule<ScenarioWithThenSubject>}
+ */
 export class StreamProcessorShouldHaveFailingPartition implements IRule<ScenarioWithThenSubject> {
     constructor(private _tenantId: Guid, private _eventProcessorId: Guid, private _scopeId: Guid, private _partitionId: Guid) {
     }
 
+    /** @inheritdoc */
     async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject) {
         let state: any;
 

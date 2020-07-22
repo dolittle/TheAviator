@@ -5,10 +5,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { Scenario, ScenarioEnvironmentDefinition } from '../gherkin';
+
 import { Microservice } from '../microservices';
-
-import { IFlightPaths } from './IFlightPaths';
-
+import { IFlightPaths } from './index';
 import zeroPad from '../zeroPad';
 
 /**

@@ -3,6 +3,12 @@
 
 import { Scenario, ScenarioEnvironment } from '../gherkin';
 
+/**
+ * Represents a checklist that has to be performed prior to a Flight.
+ *
+ * @export
+ * @class PreflightChecklist
+ */
 export class PreflightChecklist {
     readonly scenariosByEnvironment: Map<ScenarioEnvironment, Scenario[]>;
 
