@@ -3,7 +3,8 @@
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Scenario, ScenarioEnvironment, ScenarioEnvironmentDefinition } from '../gherkin';
+import { Scenario } from '@dolittle/testing.gherkin';
+import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
 import { IFlightPaths, IFlightRecorder, PreflightChecklist } from './index';
 
 /**
@@ -19,7 +20,7 @@ export class Flight {
     readonly preflightChecklist: PreflightChecklist;
     readonly platform: string;
 
-    readonly environment: BehaviorSubject<ScenarioEnvironment>;
+    readonly environment: BehaviorSubject<MicroserviceScenarioEnvironment>;
     readonly scenario: BehaviorSubject<Scenario>;
 
     constructor(platform: string, flightPaths: IFlightPaths, preflightChecklist: PreflightChecklist) {
@@ -27,7 +28,7 @@ export class Flight {
         this._flightPaths = flightPaths;
         this.preflightChecklist = preflightChecklist;
 
-        this.environment = new BehaviorSubject<ScenarioEnvironment>(ScenarioEnvironment.empty);
+        this.environment = new BehaviorSubject<MicroserviceScenarioEnvironment>(MicroserviceScenarioEnvironment.empty);
         this.scenario = new BehaviorSubject<Scenario>(Scenario.none);
     }
 

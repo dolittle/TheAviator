@@ -10,3 +10,4 @@ export * from './MicroserviceDefinition';
 export * from './MicroserviceFactory';
 export * from './configuration';
 export * as shared from './shared';
+export * from './eventStores';

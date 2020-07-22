@@ -5,8 +5,9 @@ import { retry } from 'async';
 
 import { Guid } from '@dolittle/rudiments';
 import { IRule, IRuleContext } from '@dolittle/rules';
-import { ScenarioWithThenSubject } from '../';
-import { MissingStreamProcessorState, StreamProcessorIsNotFailing } from './';
+import { ScenarioWithThenSubject } from '@dolittle/testing.gherkin';
+import { MissingStreamProcessorState, StreamProcessorIsNotFailing } from './index';
+import { MicroserviceScenarioSubjectContent } from '../index';
 
 /**
  * Represents an implementation of IRule for ScenarioWithThenSubject for when a stream processor should be failing.
@@ -15,17 +16,17 @@ import { MissingStreamProcessorState, StreamProcessorIsNotFailing } from './';
  * @class StreamProcessorShouldBeFailing
  * @implements {IRule<ScenarioWithThenSubject>}
  */
-export class StreamProcessorShouldBeFailing implements IRule<ScenarioWithThenSubject> {
+export class StreamProcessorShouldBeFailing implements IRule<ScenarioWithThenSubject<MicroserviceScenarioSubjectContent>> {
     constructor(private _tenantId: Guid, private _eventProcessorId: Guid, private _scopeId: Guid) {
     }
 
     /** @inheritdoc */
-    async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject) {
+    async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject<MicroserviceScenarioSubjectContent>) {
         let state: any;
 
         try {
             await retry({ times: 10, interval: 200 }, async (callback, results) => {
-                state = await subject.microservice.eventStore.getStreamProcessorState(this._tenantId, this._eventProcessorId, this._scopeId, this._eventProcessorId);
+                state = await subject.content.microservice.eventStore.getStreamProcessorState(this._tenantId, this._eventProcessorId, this._scopeId, this._eventProcessorId);
                 if (!state || !this.streamProcessorIsFailing(state)) {
                     callback(new Error('No state'));
                 } else {

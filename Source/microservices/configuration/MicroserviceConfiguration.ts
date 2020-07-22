@@ -9,8 +9,8 @@ import {
     EventStoreTenantConfiguration,
     EventHorizonConfiguration,
     EventHorizonTenantConsentConfiguration
-} from './';
-import { MicroserviceDefinition, Platform, shared } from '../';
+} from './index';
+import { MicroserviceDefinition, Platform, shared } from '../index';
 
 /**
  * Represents the configuration of a microservice.

@@ -4,17 +4,19 @@
 import { Constructor } from '@dolittle/rudiments';
 
 import {
+    MicroserviceScenarioContext,
+    MicroserviceScenarioEnvironment,
+    MicroserviceScenarioEnvironmentDefinition,
+    MicroserviceScenarioEnvironmentBuilder
+} from '@dolittle/aviator.gherkin';
+import {
     ScenarioFor,
     ISpecificationBuilder,
-    ScenarioContext,
-    ScenarioEnvironment,
     Scenario,
-    ScenarioEnvironmentDefinition,
-    IScenarioEnvironmentBuilder
-} from '../gherkin';
+} from '@dolittle/testing.gherkin';
 
-import { Platform } from '../microservices';
 import { IPreflightPlanner, PreflightChecklist } from './index';
+import { Platform } from '@dolittle/aviator.microservices';
 
 /**
  * Represents an implementation of IPreflightPlanner.
@@ -25,30 +27,31 @@ import { IPreflightPlanner, PreflightChecklist } from './index';
  */
 export class PreflightPlanner implements IPreflightPlanner {
 
-    constructor(private _scenarioEnvironmentBuilder: IScenarioEnvironmentBuilder, private _specificationBuilder: ISpecificationBuilder) {
+    constructor(private _scenarioEnvironmentBuilder: MicroserviceScenarioEnvironmentBuilder, private _specificationBuilder: ISpecificationBuilder) {
     }
 
     /** @inheritdoc */
-    async createChecklistFor(platform: Platform, ...scenarios: Constructor<ScenarioFor<ScenarioContext>>[]): Promise<PreflightChecklist> {
-        const scenarioEnvironmentsByContextType: Map<Constructor<ScenarioContext>, ScenarioEnvironment> = new Map();
-        const scenarioContextsByContextType: Map<Constructor<ScenarioContext>, ScenarioContext> = new Map();
-        const scenariosByEnvironments: Map<ScenarioEnvironment, Scenario[]> = new Map();
+    async createChecklistFor(platform: Platform, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<PreflightChecklist> {
+        const scenarioEnvironmentsByContextType: Map<Constructor<MicroserviceScenarioContext>, MicroserviceScenarioEnvironment> = new Map();
+        const scenarioContextsByContextType: Map<Constructor<MicroserviceScenarioContext>, MicroserviceScenarioContext> = new Map();
+        const scenariosByEnvironments: Map<MicroserviceScenarioEnvironment, Scenario[]> = new Map();
 
         for (const scenarioForConstructor of scenarios) {
-            const instance = new scenarioForConstructor() as ScenarioFor<ScenarioContext>;
+            const instance = new scenarioForConstructor() as ScenarioFor<MicroserviceScenarioContext>;
             const scenarioContextType = instance.for;
 
-            let scenarioEnvironment: ScenarioEnvironment | undefined;
+            let scenarioEnvironment: MicroserviceScenarioEnvironment | undefined;
 
             if (scenarioEnvironmentsByContextType.has(scenarioContextType)) {
                 scenarioEnvironment = scenarioEnvironmentsByContextType.get(scenarioContextType);
             } else {
                 const scenarioContext = new scenarioContextType();
 
-                const scenarioEnvironmentDefinition = new ScenarioEnvironmentDefinition();
+                const scenarioEnvironmentDefinition = new MicroserviceScenarioEnvironmentDefinition();
                 scenarioContext.describe(scenarioEnvironmentDefinition);
 
-                scenarioEnvironment = await this._scenarioEnvironmentBuilder.buildFrom(platform, scenarioEnvironmentDefinition);
+                await this._scenarioEnvironmentBuilder.forPlatformAndDefinition(platform, scenarioEnvironmentDefinition);
+                scenarioEnvironment = this._scenarioEnvironmentBuilder.build();
                 scenarioEnvironmentsByContextType.set(scenarioContextType, scenarioEnvironment);
                 scenariosByEnvironments.set(scenarioEnvironment, []);
                 scenarioContextsByContextType.set(scenarioContextType, scenarioContext);

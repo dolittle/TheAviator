@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
-import { shared } from './';
+import { shared } from './index';
 
 /**
  * Defines a system that can perform a set of actions on a microservice.

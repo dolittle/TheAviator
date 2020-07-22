@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Scenario, ScenarioEnvironment } from '../gherkin';
+import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { Scenario } from '@dolittle/testing.gherkin';
 
 /**
  * Represents a checklist that has to be performed prior to a Flight.
@@ -10,9 +11,9 @@ import { Scenario, ScenarioEnvironment } from '../gherkin';
  * @class PreflightChecklist
  */
 export class PreflightChecklist {
-    readonly scenariosByEnvironment: Map<ScenarioEnvironment, Scenario[]>;
+    readonly scenariosByEnvironment: Map<MicroserviceScenarioEnvironment, Scenario[]>;
 
-    constructor(scenariosByEnvironment: Map<ScenarioEnvironment, Scenario[]>) {
+    constructor(scenariosByEnvironment: Map<MicroserviceScenarioEnvironment, Scenario[]>) {
         this.scenariosByEnvironment = scenariosByEnvironment;
     }
 }

@@ -3,9 +3,7 @@
 
 import { Subject } from 'rxjs';
 
-import { Scenario, ScenarioResult } from '../gherkin';
-
-import { ScenarioResult as ReportingScenarioResult } from './reporting';
+import { Scenario, ScenarioResult, ReportingScenarioResult } from '@dolittle/testing.gherkin';
 
 /**
  * Defines a system that can record information about a flight.

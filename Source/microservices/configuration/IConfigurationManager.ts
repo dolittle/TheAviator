@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Mount } from '../../k8s';
-import { MicroserviceConfiguration } from './';
+import { Mount } from '@dolittle/aviator.k8s';
+import { MicroserviceConfiguration } from './index';
 
 /**
  * Defines a system that can manage configurations.

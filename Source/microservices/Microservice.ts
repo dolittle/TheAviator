@@ -1,11 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import {  } from '../k8s';
-
-import { IMicroserviceActions, MicroserviceActions } from './index';
 import { MicroserviceConfiguration } from './configuration';
-import { IEventStore, EventStore } from '../eventStores';
+import { IEventStore, EventStore } from './eventStores';
+import { IMicroserviceActions, MicroserviceActions } from './index';
 
 /**
  * Represents a microservice.

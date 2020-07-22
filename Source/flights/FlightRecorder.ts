@@ -7,15 +7,12 @@ import * as path from 'path';
 
 import { Subject } from 'rxjs';
 
-import {  } from '../k8s';
-import { Microservice } from '../microservices';
-
-import { Scenario, ScenarioResult, ScenarioEnvironmentDefinition, ScenarioEnvironment, ScenarioContext } from '../gherkin';
-
-import { ScenarioResult as ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter } from './reporting';
-import { ISerializer } from '../index';
+import { ISerializer } from '@dolittle/serialization.json';
+import { Scenario, ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter, ScenarioResult } from '@dolittle/testing.gherkin';
+import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
 
 import { Flight, IFlightRecorder } from './index';
+import { Microservice } from '@dolittle/aviator.microservices';
 
 /**
  * Represents an implementation of IFlightRecorder.
@@ -72,7 +69,7 @@ export class FlightRecorder implements IFlightRecorder {
 
     /** @inheritdoc */
     async captureMetricsFor(scenario: Scenario) {
-        scenario.environment.forEachMicroservice(async microservice => {
+        (scenario.environment as MicroserviceScenarioEnvironment).forEachMicroservice(async microservice => {
             const currentScenarioPath = this._flight.paths.forMicroserviceInScenario(scenario, microservice);
             const metricsFilePath = path.join(currentScenarioPath, 'metrics.txt');
             const metrics = await microservice.actions.getRuntimeMetrics();
@@ -80,7 +77,7 @@ export class FlightRecorder implements IFlightRecorder {
         });
     }
 
-    private collectLogsFor(environment: ScenarioEnvironment) {
+    private collectLogsFor(environment: MicroserviceScenarioEnvironment) {
         Object.values(environment.microservices).forEach(microservice => {
             microservice.head.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
             microservice.runtime.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));

@@ -5,8 +5,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as Handlebars from 'handlebars';
 
-import { Mount } from '../../k8s';
-import { IConfigurationManager, ConfigurationTarget, MicroserviceConfiguration } from './';
+import { Mount } from '@dolittle/aviator.k8s';
+import { IConfigurationManager, ConfigurationTarget, MicroserviceConfiguration } from './index';
 
 const HeadConfig = 'head';
 const RuntimeConfig = 'runtime';

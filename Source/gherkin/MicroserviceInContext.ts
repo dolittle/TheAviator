@@ -1,12 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
 import { RuleSetContainerEvaluation, BrokenRule } from '@dolittle/rules';
-import { IMicroserviceActions, Microservice } from '../microservices';
-import { StreamProcessorRuleSetContainerBuilder } from '../rules/streamProcessors';
-import { EventLogRuleSetContainerBuilder, StreamsRuleSetContainerBuilder } from '../rules/streams';
-import { ScenarioRuleSetContainerBuilder } from '../rules';
+import { Microservice, IMicroserviceActions } from '@dolittle/aviator.microservices';
+import { MicroserviceRuleSetContainerBuilder, EventLogRuleSetContainerBuilder, StreamProcessorRuleSetContainerBuilder, StreamsRuleSetContainerBuilder } from '@dolittle/aviator.rules';
 
 export class MicroserviceInContext {
     readonly microservice: Microservice;
@@ -47,7 +44,7 @@ export class MicroserviceInContext {
         return brokenRules;
     }
 
-    private async evaluateAndGetBrokenRules(ruleSetContainerBuilder: ScenarioRuleSetContainerBuilder | undefined) {
+    private async evaluateAndGetBrokenRules(ruleSetContainerBuilder: MicroserviceRuleSetContainerBuilder | undefined) {
         if (!ruleSetContainerBuilder) {
             return [];
         }

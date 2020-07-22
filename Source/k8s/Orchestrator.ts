@@ -11,7 +11,7 @@ export class Orchestrator implements IOrchestrator {
     private readonly _coreApi: CoreV1Api;
     private readonly _appsApi: AppsV1Api;
 
-    constructor(readonly private _podFactory: IPodFactory, options?: K8sConfiguration) {
+    constructor(private readonly _podFactory: IPodFactory, options?: K8sConfiguration) {
         this._config = this._createConfig(options);
         this._coreApi = this._config.makeApiClient(CoreV1Api);
         this._appsApi = this._config.makeApiClient(AppsV1Api);
@@ -45,18 +45,5 @@ export class Orchestrator implements IOrchestrator {
             });
         }
         return config;
-    }
-
-    private _getPod(): V1Pod {
-        const pod = new V1Pod();
-        pod.apiVersion = 'v1';
-        pod.spec = {
-            containers: [
-                {
-                    name: 
-                }
-            ], 
-        }
-        return pod;
     }
 }

@@ -3,9 +3,9 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { Microservice } from '../../microservices';
-import { StreamProcessorShouldBeFailing, StreamProcessorShouldBeAtPosition, StreamProcessorShouldHaveFailingPartition } from './';
-import { ScenarioRuleSetContainerBuilder } from '../';
+import { Microservice } from '@dolittle/aviator.microservices';
+import { StreamProcessorShouldBeFailing, StreamProcessorShouldBeAtPosition, StreamProcessorShouldHaveFailingPartition } from './index';
+import { MicroserviceRuleSetContainerBuilder } from '../index';
 
 /**
  * Represents a rule set container builder for stream processors
@@ -14,7 +14,7 @@ import { ScenarioRuleSetContainerBuilder } from '../';
  * @class StreamProcessorRuleSetContainerBuilder
  * @extends {ScenarioRuleSetContainerBuilder}
  */
-export class StreamProcessorRuleSetContainerBuilder extends ScenarioRuleSetContainerBuilder {
+export class StreamProcessorRuleSetContainerBuilder extends MicroserviceRuleSetContainerBuilder {
     constructor(microservice: Microservice) {
         super(microservice);
     }

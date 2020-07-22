@@ -3,8 +3,8 @@
 
 import chalk from 'chalk';
 
-import { Scenario, ScenarioEnvironment } from '../gherkin';
-import { ScenarioResult } from './reporting';
+import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { Scenario, ReportingScenarioResult } from '@dolittle/testing.gherkin';
 import { Flight, IFlightReporter } from './index';
 
 /**
@@ -23,8 +23,8 @@ export class FlightReporter implements IFlightReporter {
         flight.recorder.scenarioResult.subscribe(this.outputScenarioResult);
     }
 
-    private outputEnvironment(environment: ScenarioEnvironment) {
-        if (environment === ScenarioEnvironment.empty) {
+    private outputEnvironment(environment: MicroserviceScenarioEnvironment) {
+        if (environment === MicroserviceScenarioEnvironment.empty) {
             return;
         }
 
@@ -51,7 +51,7 @@ export class FlightReporter implements IFlightReporter {
         }
     }
 
-    private outputScenarioResult(scenarioResult: ScenarioResult) {
+    private outputScenarioResult(scenarioResult: ReportingScenarioResult) {
 
         for (const thenResult of scenarioResult.result.results) {
             const prefix = thenResult.brokenRules.length === 0 ? chalk.green('✔') : chalk.red('✗');

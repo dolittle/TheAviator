@@ -3,9 +3,9 @@
 
 import * as path from 'path';
 
-import { Mount } from '../k8s';
-import { Microservice, IMicroserviceFactory } from './';
+import { Mount } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, IConfigurationManager } from './configuration';
+import { Microservice, IMicroserviceFactory } from './index';
 
 /**
  * Represents an implementation of IMicroserviceFactory.

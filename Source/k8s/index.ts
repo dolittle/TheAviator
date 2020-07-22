@@ -14,4 +14,4 @@ export * from './IOrchestrator';
 export * from './ConfigurationProvider';
 export * from './Orchestrator';
 
-export const orchestrator = new Orchestrator(ConfigurationProvider.get().provide());
+export const orchestrator = new Orchestrator(undefined as any, ConfigurationProvider.get().provide());
