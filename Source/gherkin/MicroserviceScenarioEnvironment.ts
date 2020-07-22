@@ -7,7 +7,7 @@ import { Microservice } from '@dolittle/aviator.microservices';
 
 import { MicroserviceScenarioEnvironmentDefinition } from './index';
 import { ISerializer } from '@dolittle/serialization.json';
-import { Scenario, ScenarioEnvironment } from '@dolittle/testing.gherkin';
+import { Scenario, ScenarioEnvironment, emptyScenarioEnvironment } from '@dolittle/testing.gherkin';
 
 const eventStoreDumpFolderName = 'eventStore';
 const containerOptionsFileExtension = '.json';
@@ -17,19 +17,6 @@ export type GetMicroserviceScenarioDestination = (scenario: Scenario, microservi
 export type GetMicroserviceDestination = (microservice: Microservice) => string;
 
 export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<MicroserviceScenarioEnvironmentDefinition> {
-
-    /**
-     * Gets an empty {ScenarioEnvironment}
-     *
-     * @static
-     * @type {ScenarioEnvironment}
-     */
-    static readonly empty: MicroserviceScenarioEnvironment = new MicroserviceScenarioEnvironment(
-        new MicroserviceScenarioEnvironmentDefinition(),
-        {},
-        {} as ISerializer,
-        _ => '',
-        _ => '');
 
     constructor(
         definition: MicroserviceScenarioEnvironmentDefinition,
@@ -118,3 +105,10 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
         }
     }
 }
+
+export const emptyMicroserviceScenarioEnvironment = new MicroserviceScenarioEnvironment(
+    {} as MicroserviceScenarioEnvironmentDefinition,
+    {},
+    {} as ISerializer,
+    {} as GetMicroserviceScenarioDestination,
+    {} as GetMicroserviceDestination);

@@ -3,7 +3,7 @@
 
 import chalk from 'chalk';
 
-import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { MicroserviceScenarioEnvironment, emptyMicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
 import { Scenario, ReportingScenarioResult } from '@dolittle/testing.gherkin';
 import { Flight, IFlightReporter } from './index';
 
@@ -24,7 +24,7 @@ export class FlightReporter implements IFlightReporter {
     }
 
     private outputEnvironment(environment: MicroserviceScenarioEnvironment) {
-        if (environment === MicroserviceScenarioEnvironment.empty) {
+        if (environment === emptyMicroserviceScenarioEnvironment) {
             return;
         }
 
