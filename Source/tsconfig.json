@@ -1,0 +1,12 @@
+{
+    "files": [],
+    "include": [],
+    "references": [
+        { "path": "./aviator" },
+        { "path": "./flights" },
+        { "path": "./gherkin" },
+        { "path": "./k8s" },
+        { "path": "./microservices" },
+        { "path": "./rules" },
+    ]
+}

@@ -4,12 +4,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { Scenario, ScenarioEnvironmentDefinition } from '../gherkin';
-import { Microservice } from '../microservices';
+import { Microservice } from '@dolittle/aviator.microservices';
+import { Scenario } from '@dolittle/testing.gherkin';
 
-import { IFlightPaths } from './IFlightPaths';
-
-import zeroPad from '../zeroPad';
+import { IFlightPaths } from './index';
+import zeroPad from './zeroPad';
 
 /**
  * Represents an implementation of {IFlightPaths}

@@ -1,0 +1,8 @@
+{
+    "extends": "@dolittle/typescript.config",
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "ES2018",
+        "downlevelIteration": true
+    }
+}

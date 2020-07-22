@@ -2,17 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Guid } from '@dolittle/rudiments';
+import { Microservice, shared } from '@dolittle/aviator.microservices';
 
-import { EventWithContentShouldBeInStream } from './EventWithContentShouldBeInStream';
-import { Microservice } from '../../microservices/Microservice';
+import { EventWithContentShouldBeInStream } from './index';
+import { MicroserviceRuleSetContainerBuilder } from '../index';
 
-import { ScenarioRuleSetContainerBuilder } from '../ScenarioRuleSetContainerBuilder';
-import { EventObject } from '../../microservices/shared/EventObject';
 
-export class EventLogRuleSetContainerBuilder extends ScenarioRuleSetContainerBuilder {
+export class EventLogRuleSetContainerBuilder extends MicroserviceRuleSetContainerBuilder {
     constructor(microservice: Microservice) {
         super(microservice);
     }
 
-    should_contain = (tenantId: Guid, ...events: EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, 'event-log', ...events));
+    should_contain = (tenantId: Guid, ...events: shared.EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, 'event-log', ...events));
 }

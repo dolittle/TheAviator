@@ -1,71 +1,23 @@
 {
-    "name": "@dolittle/aviator",
-    "version": "1.0.0-rc.2",
-    "description": "",
-    "author": "",
-    "license": "MIT",
-    "publishConfig": {
-        "access": "public"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/dolittle/TheAviator"
-    },
-    "bugs": {
-        "url": "git+https://github.com/dolittle/TheAviator/issues"
-    },
-    "homepage": "https://github.com/dolittle/TheAviator#readme",
-    "files": [
-        "Distribution",
-        "cleanup.sh",
-        "Source"
+    "private": true,
+    "workspaces": [
+        "Source/*"
     ],
-    "main": "Distribution/index.js",
-    "typings": "Distribution/index.d.ts",
     "scripts": {
-        "start": "yarn build && node Distribution/index.js",
         "prebuild": "yarn clean",
         "postbuild": "yarn lint",
-        "build": "tsc -b",
+        "build": "tsc -b Source/tsconfig.json",
         "clean": "gulp clean --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "lint": "gulp lint --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
-        "lint:fix": "gulp lint-fix --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
         "test:run": "gulp test-run --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
         "test:clean": "gulp test-clean --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "lint": "gulp lint --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
+        "lint:fix": "gulp lint-fix --gulpfile node_modules/@dolittle/typescript.build/Gulpfile.js",
         "ci": "yarn build && yarn test:run && yarn test:clean"
     },
     "dependencies": {
-        "@dolittle/rudiments": "3.0.0",
-        "@dolittle/rules": "3.0.0",
-        "@kubernetes/client-node": "^0.12.0",
-        "async": "3.2.0",
-        "botbuilder": "4.9.2",
-        "byline": "5.0.0",
-        "chalk": "4.1.0",
-        "dockerode": "3.2.0",
-        "dotenv": "8.2.0",
-        "express": "4.17.1",
-        "get-port": "5.1.1",
-        "handlebars": "4.7.6",
-        "moment": "2.27.0",
-        "mongodb": "3.5.9",
-        "node-fetch": "2.6.0",
-        "reflect-metadata": "0.1.13",
-        "restify": "8.5.1",
-        "rxjs": "6.6.0",
-        "stack-trace": "0.0.10",
-        "uuid-mongodb": "2.3.0"
+        "reflect-metadata": "0.1.13"
     },
     "devDependencies": {
-        "@dolittle/typescript.build": "rc",
-        "@types/async": "3.2.3",
-        "@types/byline": "4.2.32",
-        "@types/chalk": "2.2.0",
-        "@types/dockerode": "2.5.34",
-        "@types/express": "4.17.7",
-        "@types/moment": "2.13.0",
-        "@types/mongodb": "3.5.25",
-        "@types/node-fetch": "2.5.7",
-        "@types/restify": "8.4.2"
+        "@dolittle/typescript.build": "rc"
     }
 }

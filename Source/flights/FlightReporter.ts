@@ -1,22 +1,30 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { IFlightReporter } from './IFlightReporter';
-import { ScenarioResult } from './reporting';
-import { Flight } from './Flight';
-import { Scenario, ScenarioEnvironment } from '../gherkin';
-
 import chalk from 'chalk';
 
+import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { Scenario, ReportingScenarioResult } from '@dolittle/testing.gherkin';
+import { Flight, IFlightReporter } from './index';
+
+/**
+ * Represents an implementation of IFlightReporter.
+ *
+ * @export
+ * @class FlightReporter
+ * @implements {IFlightReporter}
+ */
 export class FlightReporter implements IFlightReporter {
+
+    /** @inheritdoc */
     observe(flight: Flight): void {
         flight.scenario.subscribe(this.outputScenario);
         flight.environment.subscribe(this.outputEnvironment);
         flight.recorder.scenarioResult.subscribe(this.outputScenarioResult);
     }
 
-    private outputEnvironment(environment: ScenarioEnvironment) {
-        if (environment === ScenarioEnvironment.empty) {
+    private outputEnvironment(environment: MicroserviceScenarioEnvironment) {
+        if (environment === MicroserviceScenarioEnvironment.empty) {
             return;
         }
 
@@ -43,7 +51,7 @@ export class FlightReporter implements IFlightReporter {
         }
     }
 
-    private outputScenarioResult(scenarioResult: ScenarioResult) {
+    private outputScenarioResult(scenarioResult: ReportingScenarioResult) {
 
         for (const thenResult of scenarioResult.result.results) {
             const prefix = thenResult.brokenRules.length === 0 ? chalk.green('✔') : chalk.red('✗');

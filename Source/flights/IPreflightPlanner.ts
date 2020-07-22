@@ -2,9 +2,26 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Constructor } from '@dolittle/rudiments';
-import { ScenarioFor, ScenarioContext } from '../gherkin';
-import { PreflightChecklist } from './PreflightChecklist';
+import { MicroserviceScenarioContext } from '@dolittle/aviator.gherkin';
+import { Platform } from '@dolittle/aviator.microservices';
+import { ScenarioFor } from '@dolittle/testing.gherkin';
 
+import { PreflightChecklist } from './index';
+
+/**
+ * Defines a system that can plan out a flight.
+ *
+ * @export
+ * @interface IPreflightPlanner
+ */
 export interface IPreflightPlanner {
-    createChecklistFor(target: string, ...scenarios: Constructor<ScenarioFor<ScenarioContext>>[]): Promise<PreflightChecklist>
+
+    /**
+     * Creates a preflight checklist for
+     *
+     * @param {string} platform
+     * @param {...Constructor<ScenarioFor<ScenarioContext>>[]} scenarios
+     * @returns {Promise<PreflightChecklist>}
+     */
+    createChecklistFor(platform: Platform, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<PreflightChecklist>
 }

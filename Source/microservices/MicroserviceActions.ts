@@ -4,16 +4,21 @@
 import fetch from 'node-fetch';
 import { Guid } from '@dolittle/rudiments';
 
-import { Microservice } from './Microservice';
-import { IMicroserviceActions } from './IMicroserviceActions';
-import { EventObject } from '../microservices/shared/EventObject';
+import { Microservice, IMicroserviceActions, shared } from './index';
 
-
+/**
+ * Represents an implementation of IMicroserviceActions.
+ *
+ * @export
+ * @class MicroserviceActions
+ * @implements {IMicroserviceActions}
+ */
 export class MicroserviceActions implements IMicroserviceActions {
 
     constructor(private readonly _microservice: Microservice) {
     }
 
+    /** @inheritdoc */
     async checkStatus(): Promise<string> {
         try {
             const url = `${this.getHeadBaseUrl()}/api/Events`;
@@ -25,7 +30,8 @@ export class MicroserviceActions implements IMicroserviceActions {
         }
     }
 
-    async commitEvents(tenantId: Guid, eventSource: Guid, ...events: EventObject[]): Promise<void> {
+    /** @inheritdoc */
+    async commitEvents(tenantId: Guid, eventSource: Guid, ...events: shared.EventObject[]): Promise<void> {
         try {
             await this.postCommitRequest(
                 this.getUrlForCommittingEvents(tenantId, eventSource, false),
@@ -35,7 +41,8 @@ export class MicroserviceActions implements IMicroserviceActions {
         }
     }
 
-    async commitPublicEvents(tenantId: Guid, eventSource: Guid, ...events: EventObject[]): Promise<void> {
+    /** @inheritdoc */
+    async commitPublicEvents(tenantId: Guid, eventSource: Guid, ...events: shared.EventObject[]): Promise<void> {
         try {
             await this.postCommitRequest(
                 this.getUrlForCommittingEvents(tenantId, eventSource, true),
@@ -44,7 +51,8 @@ export class MicroserviceActions implements IMicroserviceActions {
         }
     }
 
-    async commitAggregateEvents(tenantId: Guid, eventSource: Guid, version: number, ...events: EventObject[]): Promise<void> {
+    /** @inheritdoc */
+    async commitAggregateEvents(tenantId: Guid, eventSource: Guid, version: number, ...events: shared.EventObject[]): Promise<void> {
         try {
             await this.postCommitRequest(
                 this.getUrlForCommittingAggregateEvents(tenantId, eventSource, version),
@@ -53,6 +61,7 @@ export class MicroserviceActions implements IMicroserviceActions {
     }
 
 
+    /** @inheritdoc */
     async getRuntimeMetrics(): Promise<string> {
         try {
             const url = `http://localhost:${this._microservice.runtime.boundPorts.get(9700)}/metrics`;

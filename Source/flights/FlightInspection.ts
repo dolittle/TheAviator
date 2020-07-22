@@ -1,14 +1,24 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Flight } from './Flight';
-import { IFlightInspection } from './IFlightInspection';
-import { ISpecificationRunner, ScenarioResult, Scenario, ScenarioEnvironment } from '../gherkin';
+import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { ISpecificationRunner, ScenarioResult, Scenario } from '@dolittle/testing.gherkin';
+import { IFlightInspection, Flight } from './index';
 
+/**
+ * Represents an implementation of IFlightInspection.
+ *
+ * @export
+ * @class FlightInspection
+ * @implements {IFlightInspection}
+ */
 export class FlightInspection implements IFlightInspection {
     constructor(private _flight: Flight, private _specificationRunner: ISpecificationRunner) {
     }
 
+    /**
+     * @inheritdoc
+     */
     async runPreflightCheck(): Promise<void> {
         for (const [environment, scenarios] of this._flight.preflightChecklist.scenariosByEnvironment) {
             this._flight.environment.next(environment);
@@ -29,7 +39,7 @@ export class FlightInspection implements IFlightInspection {
         this._flight.recorder.conclude();
     }
 
-    private async runScenario(scenario: Scenario, environment: ScenarioEnvironment): Promise<ScenarioResult> {
+    private async runScenario(scenario: Scenario, environment: MicroserviceScenarioEnvironment): Promise<ScenarioResult> {
         this._flight.scenario.next(scenario);
         await scenario.instance.context?.establish(environment);
 
@@ -37,13 +47,13 @@ export class FlightInspection implements IFlightInspection {
         return new ScenarioResult(scenario, specificationResult);
     }
 
-    private async recordScenario(scenarioResult: ScenarioResult, scenario: Scenario, environment: ScenarioEnvironment) {
+    private async recordScenario(scenarioResult: ScenarioResult, scenario: Scenario, environment: MicroserviceScenarioEnvironment) {
         await this._flight.recorder.resultsFor(scenarioResult);
         await this._flight.recorder.captureMetricsFor(scenario);
         await environment.dumpEventStore(scenario);
     }
 
-    private async cleanupAfterScenario(scenario: Scenario, environment: ScenarioEnvironment) {
+    private async cleanupAfterScenario(scenario: Scenario, environment: MicroserviceScenarioEnvironment) {
         this._flight.scenario.next(Scenario.none);
         await environment.forEachMicroservice(microservice => microservice.eventStore.clear());
         await scenario.instance.context?.cleanup();

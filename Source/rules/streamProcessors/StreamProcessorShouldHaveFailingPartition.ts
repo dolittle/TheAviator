@@ -4,21 +4,29 @@
 import { retry } from 'async';
 import { Guid } from '@dolittle/rudiments';
 import { IRule, IRuleContext } from '@dolittle/rules';
+import { ScenarioWithThenSubject } from '@dolittle/testing.gherkin';
 
-import { ScenarioWithThenSubject } from '../ScenarioWithThenSubject';
-import { MissingStreamProcessorState, StreamProcessorIsNotFailing, StreamProcessorDoesNotHaveFailingPartition } from './rules';
+import { MissingStreamProcessorState, StreamProcessorIsNotFailing, StreamProcessorDoesNotHaveFailingPartition } from './';
+import { MicroserviceScenarioSubjectContent } from '../index';
 
-
-export class StreamProcessorShouldHaveFailingPartition implements IRule<ScenarioWithThenSubject> {
+/**
+ * Represents an implementation of IRule for ScenarioWithThenSubject for when a stream processor should have failing partition
+ *
+ * @export
+ * @class StreamProcessorShouldHaveFailingPartition
+ * @implements {IRule<ScenarioWithThenSubject>}
+ */
+export class StreamProcessorShouldHaveFailingPartition implements IRule<ScenarioWithThenSubject<MicroserviceScenarioSubjectContent>> {
     constructor(private _tenantId: Guid, private _eventProcessorId: Guid, private _scopeId: Guid, private _partitionId: Guid) {
     }
 
-    async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject) {
+    /** @inheritdoc */
+    async evaluate(context: IRuleContext, subject: ScenarioWithThenSubject<MicroserviceScenarioSubjectContent>) {
         let state: any;
 
         try {
             await retry({ times: 10, interval: 200 }, async (callback, results) => {
-                state = await subject.microservice.eventStore.getStreamProcessorState(this._tenantId, this._eventProcessorId, this._scopeId, this._eventProcessorId);
+                state = await subject.content.microservice.eventStore.getStreamProcessorState(this._tenantId, this._eventProcessorId, this._scopeId, this._eventProcessorId);
                 if (!state || !this.streamProcessorIsFailing(state) || !this.hasFailingPartition(state)) {
                     callback(new Error('No state'));
                 } else {

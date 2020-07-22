@@ -3,18 +3,16 @@
 
 import { Guid } from '@dolittle/rudiments';
 
-import { EventWithContentShouldBeInStream } from './EventWithContentShouldBeInStream';
-import { Microservice } from '../../microservices/Microservice';
+import { Microservice, shared } from '@dolittle/aviator.microservices';
+import { EventWithContentShouldBeInStream } from './index';
+import { MicroserviceRuleSetContainerBuilder } from '../index';
 
-import { ScenarioRuleSetContainerBuilder } from '../ScenarioRuleSetContainerBuilder';
-import { EventObject } from '../../microservices/shared/EventObject';
-
-export class StreamsRuleSetContainerBuilder extends ScenarioRuleSetContainerBuilder {
+export class StreamsRuleSetContainerBuilder extends MicroserviceRuleSetContainerBuilder {
     constructor(microservice: Microservice) {
         super(microservice);
     }
 
-    should_contain = (tenantId: Guid, streamId: Guid, scopeId: Guid, ...events: EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, `${scopeId.toString() !== Guid.empty.toString() ? `x-${scopeId.toString()}-` : ''}stream-${streamId.toString()}`, ...events));
-    should_be_in_public_stream = (tenantId: Guid, publicStreamId: Guid, ...events: EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, `public-stream-${publicStreamId.toString()}`, ...events));
-    should_be_in_external_event_log = (tenantId: Guid, externalScopeId: Guid, ...events: EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, `x-${externalScopeId.toString()}-event-log`, ...events));
+    should_contain = (tenantId: Guid, streamId: Guid, scopeId: Guid, ...events: shared.EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, `${scopeId.toString() !== Guid.empty.toString() ? `x-${scopeId.toString()}-` : ''}stream-${streamId.toString()}`, ...events));
+    should_be_in_public_stream = (tenantId: Guid, publicStreamId: Guid, ...events: shared.EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, `public-stream-${publicStreamId.toString()}`, ...events));
+    should_be_in_external_event_log = (tenantId: Guid, externalScopeId: Guid, ...events: shared.EventObject[]) => this.addRuleBuilderFor(new EventWithContentShouldBeInStream(tenantId, `x-${externalScopeId.toString()}-event-log`, ...events));
 }
