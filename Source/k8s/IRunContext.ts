@@ -3,12 +3,21 @@
 
 import { Guid } from '@dolittle/rudiments';
 import { IPod } from './index';
+import { V1Pod } from '@kubernetes/client-node';
 
 export interface IRunContext {
     readonly id: Guid;
     readonly pods: IPod[];
 
-    addMicroservice(): Promise<void>
+    start(): Promise<void>
+    restart(): Promise<void>
+    kill(): Promise<void>
+
+    addPod(pod: V1Pod): Promise<IPod>
+    startPod(pod: IPod): Promise<void>
+    stopPod(pod: IPod): Promise<void>
+    restartPod(pod: IPod): Promise<void>
+    killPod(pod: IPod): Promise<void>
 
     /**
      * Clear all resources.

@@ -23,11 +23,6 @@ export class Orchestrator implements IOrchestrator {
 
     }
 
-    async createPod(runId: Guid): Promise<void> {
-        await this._coreApi.createNamespacedPod(
-            'integration-tests',
-            new V1Pod());
-    }
     async createRun(): Promise<IRunContext> {
         throw new Error('Method not implemented.');
     }

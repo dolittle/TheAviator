@@ -3,6 +3,7 @@
 
 import { Microservice } from '@dolittle/aviator.microservices';
 import { ScenarioRuleSetContainerBuilder } from '@dolittle/testing.gherkin';
+
 import { MicroserviceScenarioSubjectContent } from './index';
 
 /**
@@ -13,7 +14,7 @@ import { MicroserviceScenarioSubjectContent } from './index';
  * @extends {ScenarioRuleSetContainerBuilder}
  */
 export class MicroserviceRuleSetContainerBuilder extends ScenarioRuleSetContainerBuilder<MicroserviceScenarioSubjectContent> {
-    constructor(private readonly _microservice: Microservice) {
-        super(new MicroserviceScenarioSubjectContent(_microservice));
+    constructor(microservice: Microservice) {
+        super(new MicroserviceScenarioSubjectContent(microservice));
     }
 }

@@ -64,7 +64,7 @@ export class MicroserviceActions implements IMicroserviceActions {
     /** @inheritdoc */
     async getRuntimeMetrics(): Promise<string> {
         try {
-            const url = `http://localhost:${this._microservice.runtime.boundPorts.get(9700)}/metrics`;
+            const url = `${this._microservice.runtime.pod.address}:${this._microservice.runtime.metricsPort}/metrics`;
             const response = await fetch(url, { timeout: 1000 });
             const result = await response.text();
             return result;
@@ -91,6 +91,6 @@ export class MicroserviceActions implements IMicroserviceActions {
     }
 
     private getHeadBaseUrl() {
-        return `http://localhost:${this._microservice.head.boundPorts.get(5000)}`;
+        return `${this._microservice.head.pod.address}:${this._microservice.head.interactionPort}`;
     }
 }

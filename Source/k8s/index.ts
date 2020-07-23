@@ -11,6 +11,7 @@ export * from './IPodFactory';
 export * from './IRunContext';
 export * from './IRunContexts';
 export * from './IOrchestrator';
+export * from './PodFactory';
 export * from './ConfigurationProvider';
 export * from './Orchestrator';
 

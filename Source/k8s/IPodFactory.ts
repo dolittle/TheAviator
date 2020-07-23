@@ -4,6 +4,8 @@
 import { Guid } from '@dolittle/rudiments';
 import { V1Pod } from '@kubernetes/client-node';
 
+import { Mount } from './index';
+
 export interface IPodFactory {
-    create(runId: Guid, name: string,): V1Pod
+    create(runId: Guid, shortName: string, uniqueName: string, image: string, label: string, exposedPorts: number[], mounts: Mount[]): V1Pod
 }

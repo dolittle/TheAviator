@@ -19,7 +19,6 @@ import { MicroserviceDefinition, Platform, shared } from '../index';
  * @class MicroserviceConfiguration
  */
 export class MicroserviceConfiguration {
-    shortIdentifier: string;
     eventStoreForTenants: EventStoreTenantConfiguration[];
     tenants: Tenant[];
     runtime: RuntimeConfiguration;
@@ -38,11 +37,10 @@ export class MicroserviceConfiguration {
         tenants: Guid[]) {
 
         this.identifier = identifier.toString();
-        this.shortIdentifier = this.identifier.substr(0, 8);
 
-        this.mongoHost = `mongo-${this.shortIdentifier}`;
-        const runtimeHost = `runtime-${this.shortIdentifier}`;
-        const headHost = `head-${this.shortIdentifier}`;
+        this.mongoHost = `mongo-${this.identifier}`;
+        const runtimeHost = `runtime-${this.identifier}`;
+        const headHost = `head-${this.identifier}`;
 
         this.runtime = new RuntimeConfiguration(runtimeHost, 50052, 50053);
         this.head = new HeadConfiguration(headHost);
