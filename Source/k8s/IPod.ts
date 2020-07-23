@@ -11,7 +11,7 @@ import { Mount } from './index';
 import WebSocket from 'isomorphic-ws';
 
 export interface IPod {
-    readonly id: Guid;
+    readonly runId: Guid;
     readonly name: string;
     readonly friendlyName: string;
     readonly containerImage: string;
@@ -28,5 +28,9 @@ export interface IPod {
         stdin: stream.Readable | null,
         tty: boolean,
         statusCallback?: (status: k8s.V1Status) => void): Promise<InstanceType<typeof WebSocket>>;
+    start(): Promise<void>
+    stop(): Promise<void>
+    restart(): Promise<void>
+    kill(): Promise<void>
 
 }

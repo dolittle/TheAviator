@@ -12,7 +12,7 @@ export class Pod implements IPod {
     private readonly _attach: k8s.Attach;
     private readonly _outputStream: BehaviorSubject<NodeJS.ReadWriteStream>;
     constructor(
-        readonly id: Guid,
+        readonly runId: Guid,
         readonly name: string,
         readonly friendlyName: string,
         readonly containerImage: string,
@@ -51,11 +51,22 @@ export class Pod implements IPod {
         this.captureOutputFromContainer();
     }
 
+    async stop() {
+        // TODO: STOP
+    }
+    async restart() {
+        //TODO: RESTART
+    }
+    async kill() {
+        //TODO: KILL
+    }
+
     private async captureOutputFromContainer() {
         this._outputStream.next(new stream.PassThrough());
         const ws = await this._attach.attach(this._namespace, this.name, this.friendlyName, process.stdout, process.stderr, null, false);
         ws.onmessage = event => console.log(`message: ${event.data}`);
         // TODO: Connect to stream
     }
+
 
 }
