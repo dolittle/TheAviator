@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { RuleSetContainerEvaluation, BrokenRule } from '@dolittle/rules';
-import { Microservice, IMicroserviceActions } from '@dolittle/aviator.microservices';
+import { Microservice, IMicroserviceActions, Head, Runtime, Mongo } from '@dolittle/aviator.microservices';
 import { MicroserviceRuleSetContainerBuilder, EventLogRuleSetContainerBuilder, StreamProcessorRuleSetContainerBuilder, StreamsRuleSetContainerBuilder } from '@dolittle/aviator.rules';
 
 export class MicroserviceInContext {
@@ -18,15 +18,15 @@ export class MicroserviceInContext {
         this.streams = new StreamsRuleSetContainerBuilder(this.microservice);
     }
 
-    get head(): any {
+    get head(): Head {
         return this.microservice.head;
     }
 
-    get runtime(): any {
+    get runtime(): Runtime {
         return this.microservice.runtime;
     }
 
-    get eventStoreStorage(): any {
+    get eventStoreStorage(): Mongo {
         return this.microservice.eventStoreStorage;
     }
 

@@ -7,9 +7,9 @@ import * as path from 'path';
 import { Subject } from 'rxjs';
 
 import { ISerializer } from '@dolittle/serialization.json';
-import { Scenario, ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter, ScenarioResult } from '@dolittle/testing.gherkin';
+import { Scenario, ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter, ScenarioResult, ReportingScenario } from '@dolittle/testing.gherkin';
 import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
-import { Microservice } from '@dolittle/aviator.microservices';
+import { Microservice, MicroserviceComponent } from '@dolittle/aviator.microservices';
 
 import { Flight, IFlightRecorder } from './index';
 
@@ -84,19 +84,19 @@ export class FlightRecorder implements IFlightRecorder {
         });
     }
 
-    private getOutputStreamWriterFor(microservice: Microservice, container: any) {
+    private getOutputStreamWriterFor(microservice: Microservice, component: MicroserviceComponent) {
         return (data: Buffer) => {
             const filtered = data.filter(_ => (_ === 0xA || _ === 0xD) || _ >= 0x20 && (_ < 0x80 || _ >= 0xA0));
 
             const currentScenarioPath = this._flight.paths.forMicroserviceInScenario(this._currentScenario, microservice);
-            const currentContainerPath = path.join(currentScenarioPath, `${container.options.friendlyName}.log`);
+            const currentContainerPath = path.join(currentScenarioPath, `${component.pod.friendlyName}.log`);
 
             fs.appendFileSync(currentContainerPath, filtered);
         };
     }
 
     private writePreflightChecklist() {
-        const checklist: { [key: string]: any } = {};
+        const checklist: { [key: string]: ReportingScenario[] } = {};
 
         for (const environment of this._flight.preflightChecklist.scenariosByEnvironment.keys()) {
             const scenarios = this._flight.preflightChecklist.scenariosByEnvironment.get(environment);

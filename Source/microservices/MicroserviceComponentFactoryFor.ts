@@ -32,13 +32,15 @@ export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComp
         };
     }
     protected volumeMountsFromConfigurationFiles(volumeName: string, configurationFiles: ConfigurationFiles) {
-        return configurationFiles.map(configFile => {
-            return {
+        const volumeMounts: {mountPath: string, subPath: string, name: string}[] = [];
+        configurationFiles.forEach(configFile => {
+            volumeMounts.push({
                 mountPath: `${configurationFiles.rootPath}/${configFile.fileName}`,
                 subPath: configFile.fileName,
                 name: volumeName,
-            };
+            });
         });
+        return volumeMounts;
     }
     protected configMapDataFromConfigurationFiles(configurationFiles: ConfigurationFiles) {
         const data: any = {};
