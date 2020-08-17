@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/aviator.gherkin",
-    "version": "1.0.0-rc.13",
+    "version": "1.0.0-rc.14",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -32,9 +32,9 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/aviator.k8s": "1.0.0-rc.13",
-        "@dolittle/aviator.microservices": "1.0.0-rc.13",
-        "@dolittle/aviator.rules": "1.0.0-rc.13",
+        "@dolittle/aviator.k8s": "1.0.0-rc.14",
+        "@dolittle/aviator.microservices": "1.0.0-rc.14",
+        "@dolittle/aviator.rules": "1.0.0-rc.14",
         "@dolittle/rudiments": "3.1.0",
         "@dolittle/rules": "3.1.0",
         "@dolittle/serialization.json": "3.1.0",
