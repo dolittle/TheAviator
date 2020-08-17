@@ -44,10 +44,12 @@ import {
 
 import { ISerializer, Serializer } from '@dolittle/serialization.json';
 import { MicroserviceScenarioContext, MicroserviceScenarioEnvironmentBuilder } from '@dolittle/aviator.gherkin';
-import { IRunContext } from '@dolittle/aviator.k8s';
+import { IRunContext, IOrchestrator, Orchestrator, IRunContexts, RunContexts, K8sConfiguration, ConfigurationProvider } from '@dolittle/aviator.k8s';
 
 
 export class Aviator {
+    readonly runContexts: IRunContexts;
+    readonly orchestrator: IOrchestrator;
     readonly serializer: ISerializer;
     readonly headFactory: IHeadFactory;
     readonly runtimeFactory: IRuntimeFactory;
@@ -61,7 +63,9 @@ export class Aviator {
     readonly specificationConverter: ISpecificationConverter;
     readonly specificationResultConverter: ISpecificationResultConverter;
 
-    private constructor(public readonly platform: Platform) {
+    private constructor(readonly platform: Platform, k8sConfig: K8sConfiguration | undefined) {
+        this.runContexts = new RunContexts();
+        this.orchestrator = new Orchestrator(this.runContexts, k8sConfig);
         this.serializer = new Serializer();
         this.headFactory = new HeadFactory();
         this.runtimeFactory = new RuntimeFactory();
@@ -76,11 +80,16 @@ export class Aviator {
         this.scenarioResultConverter = new ScenarioResultConverter(this.specificationResultConverter);
     }
 
-    static getFor(platform: Platform) {
-        return new Aviator(platform);
+    static getFor(platform: Platform, k8sConfig?: K8sConfiguration) {
+        return new Aviator(platform, k8sConfig || ConfigurationProvider.get().provide());
     }
 
-    async performPreflightChecklist(runContext: IRunContext, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<Flight> {
+    async performPreflightChecklist(...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<Flight> {
+        const runContext = await this.orchestrator.createRun();
+        const flight = await this.performPreflightChecklistInContext(runContext, ...scenarios);
+        return flight;
+    }
+    async performPreflightChecklistInContext(runContext: IRunContext, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<Flight> {
         const flightPaths = new FlightPaths();
         const scenarioEnvironmentBuilder = new MicroserviceScenarioEnvironmentBuilder(
             runContext,

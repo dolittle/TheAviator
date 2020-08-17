@@ -7,5 +7,6 @@ export * from './IRunContexts';
 export * from './IOrchestrator';
 export * from './NamespacedPod';
 export * from './RunContext';
+export * from './RunContexts';
 export * from './ConfigurationProvider';
 export * from './Orchestrator';

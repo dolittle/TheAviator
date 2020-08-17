@@ -31,8 +31,8 @@ export class RunContext implements IRunContext {
         return this.onAllPods(pod => pod.kill());
     }
     async createPod(pod: V1Pod, service?: V1Service, configMap?: V1ConfigMap): Promise<NamespacedPod> {
-        if (service) await this._coreApi.createNamespacedService(this._namespace, service);
-        if (configMap) await this._coreApi.createNamespacedConfigMap(this._namespace, configMap);
+        if (service != null) await this._coreApi.createNamespacedService(this._namespace, service);
+        if (configMap != null) await this._coreApi.createNamespacedConfigMap(this._namespace, configMap);
         await this._coreApi.createNamespacedPod(
             this._namespace,
             pod
