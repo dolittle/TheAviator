@@ -10,7 +10,8 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
         super('runtime');
     }
     async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Runtime> {
-        const configName = this.getConfigMapName(id, 'dolittle');
+        const volumeName = 'dolittle';
+        const configName = this.getConfigMapName(id, volumeName);
         const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
@@ -39,7 +40,13 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                                     name: 'metrics'
                                 },
                             ],
-                            volumeMounts: this.volumeMountsFromConfigurationFiles(configName, configurationFiles)
+                            volumeMounts: this.volumeMountsFromConfigurationFiles(volumeName, configurationFiles)
+                        }
+                    ],
+                    volumes: [
+                        {
+                            name: volumeName,
+                            configMap: {name: configName}
                         }
                     ]
                 }
