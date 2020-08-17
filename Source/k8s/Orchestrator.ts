@@ -16,12 +16,6 @@ export class Orchestrator implements IOrchestrator {
         this._config = this._createConfig(options);
         this._coreApi = this._config.makeApiClient(CoreV1Api);
         this._appsApi = this._config.makeApiClient(AppsV1Api);
-        this._coreApi.listNamespacedPod('integration-tests')
-            .then(res => {
-                console.log(res.body);
-            })
-            .catch(reason => console.error(reason));
-
     }
 
     async createRun(): Promise<IRunContext> {
