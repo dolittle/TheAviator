@@ -4,15 +4,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-
 import { Subject } from 'rxjs';
 
 import { ISerializer } from '@dolittle/serialization.json';
 import { Scenario, ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter, ScenarioResult } from '@dolittle/testing.gherkin';
 import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { Microservice } from '@dolittle/aviator.microservices';
 
 import { Flight, IFlightRecorder } from './index';
-import { Microservice } from '@dolittle/aviator.microservices';
 
 /**
  * Represents an implementation of IFlightRecorder.
@@ -79,9 +78,9 @@ export class FlightRecorder implements IFlightRecorder {
 
     private collectLogsFor(environment: MicroserviceScenarioEnvironment) {
         Object.values(environment.microservices).forEach(microservice => {
-            microservice.head.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
-            microservice.runtime.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
-            microservice.eventStoreStorage.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
+            microservice.head.pod.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
+            microservice.runtime.pod.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
+            microservice.eventStoreStorage.pod.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
         });
     }
 

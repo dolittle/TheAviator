@@ -3,8 +3,9 @@
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Scenario, emptyScenarioEnvironment } from '@dolittle/testing.gherkin';
+import { Scenario } from '@dolittle/testing.gherkin';
 import { MicroserviceScenarioEnvironment, emptyMicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { Platform } from '@dolittle/aviator.microservices';
 import { IFlightPaths, IFlightRecorder, PreflightChecklist } from './index';
 
 /**
@@ -15,19 +16,11 @@ import { IFlightPaths, IFlightRecorder, PreflightChecklist } from './index';
  */
 export class Flight {
     private _recorder: IFlightRecorder | undefined;
-    private _flightPaths: IFlightPaths;
-
-    readonly preflightChecklist: PreflightChecklist;
-    readonly platform: string;
 
     readonly environment: BehaviorSubject<MicroserviceScenarioEnvironment>;
     readonly scenario: BehaviorSubject<Scenario>;
 
-    constructor(platform: string, flightPaths: IFlightPaths, preflightChecklist: PreflightChecklist) {
-        this.platform = platform;
-        this._flightPaths = flightPaths;
-        this.preflightChecklist = preflightChecklist;
-
+    constructor(readonly platform: Platform, private readonly _flightPaths: IFlightPaths, readonly preflightChecklist: PreflightChecklist) {
         this.environment = new BehaviorSubject<MicroserviceScenarioEnvironment>(emptyMicroserviceScenarioEnvironment);
         this.scenario = new BehaviorSubject<Scenario>(Scenario.none);
     }

@@ -3,6 +3,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import stream from 'stream';
 
 import { MongoClient, FilterQuery, Decimal128 } from 'mongodb';
 import MUUID from 'uuid-mongodb';
@@ -71,16 +72,9 @@ export class EventStore implements IEventStore {
         for (const eventStoreForTenant of this.microservice.configuration.eventStoreForTenants) {
             const destinationFile = path.join(destination, `backup-for-tenant-${eventStoreForTenant.tenantId}`);
             backups.push(destinationFile);
-            const targetStream = fs.createWriteStream(destinationFile) as any as WritableStream;
+            const targetStream = fs.createWriteStream(destinationFile) as any as stream.Writable;
 
-            await this.microservice.eventStoreStorage.exec([
-                'mongodump',
-                '--quiet',
-                '--archive',
-                '-d',
-                eventStoreForTenant.database
-            ], undefined, targetStream,
-            {});
+            await this.microservice.eventStoreStorage.dump(eventStoreForTenant.database, targetStream);
         }
 
         return backups;
@@ -122,8 +116,7 @@ export class EventStore implements IEventStore {
     }
 
     private async getMongoClient() {
-        const url = `mongodb://localhost:${this.microservice.eventStoreStorage.boundPorts.get(27017)}`;
-        const client = await MongoClient.connect(url, { useUnifiedTopology: true });
+        const client = await MongoClient.connect(this.microservice.eventStoreStorage.clientUrl, { useUnifiedTopology: true });
         return client;
     }
 }

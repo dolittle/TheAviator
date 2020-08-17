@@ -3,7 +3,19 @@
 
 import { Constructor } from '@dolittle/rudiments';
 
-import { IMicroserviceFactory, MicroserviceFactory, IConfigurationManager, ConfigurationManager, Platform } from '@dolittle/aviator.microservices';
+import {
+    IMicroserviceFactory,
+    MicroserviceFactory,
+    IConfigurationManager,
+    ConfigurationManager,
+    Platform,
+    IHeadFactory,
+    IRuntimeFactory,
+    IMongoFactory,
+    HeadFactory,
+    RuntimeFactory,
+    MongoFactory
+} from '@dolittle/aviator.microservices';
 
 import {
     FlightRecorder,
@@ -32,11 +44,14 @@ import {
 
 import { ISerializer, Serializer } from '@dolittle/serialization.json';
 import { MicroserviceScenarioContext, MicroserviceScenarioEnvironmentBuilder } from '@dolittle/aviator.gherkin';
+import { IRunContext } from '@dolittle/aviator.k8s';
 
 
 export class Aviator {
     readonly serializer: ISerializer;
-    // readonly containerFactory: IContainerEnvironment;
+    readonly headFactory: IHeadFactory;
+    readonly runtimeFactory: IRuntimeFactory;
+    readonly mongoFactory: IMongoFactory;
     readonly microserviceFactory: IMicroserviceFactory;
     readonly configurationManager: IConfigurationManager;
     readonly specificationBuilder: ISpecificationBuilder;
@@ -48,11 +63,13 @@ export class Aviator {
 
     private constructor(public readonly platform: Platform) {
         this.serializer = new Serializer();
-        // this.containerFactory = new ContainerEnvironment();
+        this.headFactory = new HeadFactory();
+        this.runtimeFactory = new RuntimeFactory();
+        this.mongoFactory = new MongoFactory();
         this.configurationManager = new ConfigurationManager();
         this.specificationBuilder = new SpecificationBuilder();
         this.specificationRunner = new SpecificationRunner();
-        this.microserviceFactory = new MicroserviceFactory(this.configurationManager);
+        this.microserviceFactory = new MicroserviceFactory(this.configurationManager, this.headFactory, this.runtimeFactory, this.mongoFactory);
         this.specificationConverter = new SpecificationConverter();
         this.scenarioConverter = new ScenarioConverter(this.specificationConverter);
         this.specificationResultConverter = new SpecificationResultConverter(this.specificationConverter);
@@ -63,9 +80,15 @@ export class Aviator {
         return new Aviator(platform);
     }
 
-    async performPreflightChecklist(...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<Flight> {
+    async performPreflightChecklist(runContext: IRunContext, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<Flight> {
         const flightPaths = new FlightPaths();
-        const scenarioEnvironmentBuilder = new MicroserviceScenarioEnvironmentBuilder(flightPaths.base, this.microserviceFactory, this.serializer, flightPaths.forMicroserviceInScenario, flightPaths.forMicroservice);
+        const scenarioEnvironmentBuilder = new MicroserviceScenarioEnvironmentBuilder(
+            runContext,
+            flightPaths.base,
+            this.microserviceFactory,
+            this.serializer,
+            (scenario, microservice) => flightPaths.forMicroserviceInScenario(scenario,  microservice),
+            microservice => flightPaths.forMicroservice(microservice));
         const flightPlanner = new PreflightPlanner(scenarioEnvironmentBuilder, this.specificationBuilder);
         const checklist = await flightPlanner.createChecklistFor(this.platform, ...scenarios);
         const flight = new Flight(this.platform, flightPaths, checklist);
@@ -76,14 +99,4 @@ export class Aviator {
         // await flightControl.runPreflightCheck();
         return flight;
     }
-
-    // async startSimulation<T extends MicroserviceScenarioContext>(options: FlightSimulationOptions, procedure: IFlightSimulationProcedure<T>): Promise<FlightSimulation> {
-    //     const flightPaths = new FlightPaths();
-    //     const scenarioEnvironmentBuilder = new ScenarioEnvironmentBuilder(flightPaths, this.microserviceFactory, this.serializer);
-    //     const planner = new FlightSimulationPlanner(scenarioEnvironmentBuilder, this.specificationBuilder);
-    //     const plan = await planner.createPlanFor(this.platform, options, procedure);
-    //     const simulator = new FlightSimulator(this.specificationRunner);
-    //     const simulation = simulator.run(plan);
-    //     return simulation;
-    // }
 }

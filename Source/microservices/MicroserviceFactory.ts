@@ -1,11 +1,19 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import * as path from 'path';
+import { IRunContext } from '@dolittle/aviator.k8s';
 
-import { Mount } from '@dolittle/aviator.k8s';
-import { MicroserviceConfiguration, IConfigurationManager } from './configuration';
-import { Microservice, IMicroserviceFactory } from './index';
+import {
+    Microservice,
+    IMicroserviceFactory,
+    Head,
+    Runtime,
+    IHeadFactory,
+    IRuntimeFactory,
+    IConfigurationManager,
+    MicroserviceConfiguration,
+    IMongoFactory
+} from './index';
 
 /**
  * Represents an implementation of IMicroserviceFactory.
@@ -17,59 +25,22 @@ import { Microservice, IMicroserviceFactory } from './index';
 export class MicroserviceFactory implements IMicroserviceFactory {
 
     constructor(
-        private _configurationManager: IConfigurationManager) {
+        private readonly _configurationManager: IConfigurationManager,
+        private readonly _headFactory: IHeadFactory,
+        private readonly _runtimeFactory: IRuntimeFactory,
+        private readonly _mongoFactory: IMongoFactory) {
     }
 
     /** @inheritdoc */
-    async create(workingDirectory: string, configuration: MicroserviceConfiguration): Promise<Microservice> {
-        const eventStoreStorage = await this.configureContainer(
-            'mongo',
-            configuration.mongoHost,
-            'dolittle/mongodb',
-            'latest',
-            [27017],
-            [{
-                host: path.join(workingDirectory, '_microservices', configuration.name, 'backup'),
-                container: '/backup'
-            }]
-        );
-
-        const head = await this.configureContainer(
-            'head',
-            configuration.head.host,
-            `dolittle/integrationtests-head-${configuration.platform}`,
-            '5.0.0-rc.3',
-            [5000],
-            []);
-
-        const runtime = await this.configureContainer(
-            'runtime',
-            configuration.runtime.host,
-            'dolittle/runtime',
-            '5.0.1',
-            [81, 9700, 50052, 50053],
-            []);
-
-        return new Microservice(configuration, {} as any, head, runtime, eventStoreStorage);
-    }
-
-    /** @inheritdoc */
-    async configureContainer(
-        name: string,
-        uniqueName: string,
-        image: string,
-        tag: string,
-        exposedPorts: number[],
-        mounts: Mount[]): Promise<any> {
-
-        const containerOptions = {
-            name: uniqueName,
-            friendlyName: name,
-            image,
-            tag,
-            exposedPorts,
-            mounts
-        };
-        return {};
+    async create(workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
+        const head = await this._headFactory.create(runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
+        const runtime = await this._runtimeFactory.create(runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
+        const mongo = await this._mongoFactory.create(runContext, configuration);
+        return new Microservice(
+            runContext,
+            configuration,
+            head,
+            runtime,
+            mongo);
     }
 }

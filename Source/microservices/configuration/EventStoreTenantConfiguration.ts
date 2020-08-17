@@ -20,7 +20,6 @@ export class EventStoreTenantConfiguration {
      */
     constructor(tenantId: Guid, readonly server: string) {
         this.tenantId = tenantId.toString();
-        const shortIdentifier = this.tenantId.substr(0, 8);
-        this.database = `event-store-${shortIdentifier}`;
+        this.database = `event-store-${this.tenantId}`;
     }
 }

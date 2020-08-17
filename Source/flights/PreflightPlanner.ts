@@ -9,14 +9,16 @@ import {
     MicroserviceScenarioEnvironmentDefinition,
     MicroserviceScenarioEnvironmentBuilder
 } from '@dolittle/aviator.gherkin';
+
 import {
     ScenarioFor,
     ISpecificationBuilder,
     Scenario,
 } from '@dolittle/testing.gherkin';
 
-import { IPreflightPlanner, PreflightChecklist } from './index';
 import { Platform } from '@dolittle/aviator.microservices';
+
+import { IPreflightPlanner, PreflightChecklist } from './index';
 
 /**
  * Represents an implementation of IPreflightPlanner.

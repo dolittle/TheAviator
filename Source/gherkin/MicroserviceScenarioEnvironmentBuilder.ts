@@ -3,13 +3,14 @@
 
 import { ISerializer } from '@dolittle/serialization.json';
 import { ScenarioEnvironmentBuilder } from '@dolittle/testing.gherkin';
+import { IRunContext } from '@dolittle/aviator.k8s';
 import { IMicroserviceFactory, Microservice, Platform, MicroserviceConfiguration } from '@dolittle/aviator.microservices';
 
-import { MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition } from './index';
-import { GetMicroserviceScenarioDestination, GetMicroserviceDestination } from './MicroserviceScenarioEnvironment';
+import { MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition, GetMicroserviceScenarioDestination, GetMicroserviceDestination } from './index';
 
 export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentBuilder<MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition> {
     constructor(
+        private readonly _runContext: IRunContext,
         private readonly _workingDirectory: string,
         private readonly _microserviceFactory: IMicroserviceFactory,
         private readonly _serializer: ISerializer,
@@ -24,7 +25,7 @@ export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentB
 
         const configurations = this.prepareMicroserviceConfigurations(platform, definition);
         for (const configuration of configurations) {
-            const microservice = await this._microserviceFactory.create(this._workingDirectory, configuration);
+            const microservice = await this._microserviceFactory.create(this._workingDirectory, configuration, this._runContext);
             microservices[configuration.name] = microservice;
         }
 

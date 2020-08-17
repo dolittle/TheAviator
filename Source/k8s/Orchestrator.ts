@@ -1,9 +1,10 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { KubeConfig, CoreV1Api, AppsV1Api, V1Pod } from '@kubernetes/client-node';
+import { KubeConfig, CoreV1Api, AppsV1Api } from '@kubernetes/client-node';
 import { Guid } from '@dolittle/rudiments';
-import { K8sConfiguration, IOrchestrator, IRunContext, IPodFactory } from './index';
+
+import { K8sConfiguration, IOrchestrator, IRunContext, IRunContexts, RunContext } from './index';
 
 
 export class Orchestrator implements IOrchestrator {
@@ -11,7 +12,7 @@ export class Orchestrator implements IOrchestrator {
     private readonly _coreApi: CoreV1Api;
     private readonly _appsApi: AppsV1Api;
 
-    constructor(private readonly _podFactory: IPodFactory, options?: K8sConfiguration) {
+    constructor(private readonly _runContexts: IRunContexts, options?: K8sConfiguration) {
         this._config = this._createConfig(options);
         this._coreApi = this._config.makeApiClient(CoreV1Api);
         this._appsApi = this._config.makeApiClient(AppsV1Api);
@@ -23,13 +24,11 @@ export class Orchestrator implements IOrchestrator {
 
     }
 
-    async createPod(runId: Guid): Promise<void> {
-        await this._coreApi.createNamespacedPod(
-            'integration-tests',
-            new V1Pod());
-    }
     async createRun(): Promise<IRunContext> {
-        throw new Error('Method not implemented.');
+        const runId = Guid.create();
+        const runContext = new RunContext(runId, this._config, this._coreApi, this._appsApi);
+        this._runContexts.add(runContext);
+        return runContext;
     }
 
     private _createConfig(options?: K8sConfiguration): KubeConfig {

@@ -3,6 +3,9 @@
 
 export * from './Tenant';
 export * from './ConfigurationTarget';
+export * from './ConfigurationFile';
+export * from './ConfigurationFiles';
+export * from './ConfigurationTemplate';
 export * from './EventHorizonConfiguration';
 export * from './EventHorizonTenantConsentConfiguration';
 export * from './EventStoreTenantConfiguration';

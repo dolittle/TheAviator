@@ -2,6 +2,7 @@
     "extends": "@dolittle/typescript.config",
     "compilerOptions": {
         "module": "CommonJS",
-        "target": "ES2018"
+        "target": "ES2018",
+        "lib": ["ES2018"]
     }
 }
