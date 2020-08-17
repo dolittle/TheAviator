@@ -3,6 +3,7 @@
 
 import stream from 'stream';
 import { NamespacedPod } from '@dolittle/aviator.k8s';
+
 import { MicroserviceComponent, MicroserviceConfiguration } from './index';
 
 export class Mongo extends MicroserviceComponent {

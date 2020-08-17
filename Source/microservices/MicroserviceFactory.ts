@@ -6,8 +6,6 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import {
     Microservice,
     IMicroserviceFactory,
-    Head,
-    Runtime,
     IHeadFactory,
     IRuntimeFactory,
     IConfigurationManager,
