@@ -16,7 +16,7 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: this.getPodName(id, configuration),
+                    name: this.getPodName(id),
                     labels
                 },
                 spec: {
@@ -38,7 +38,7 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: this.getServiceName(id, configuration),
+                    name: this.getServiceName(id),
                     labels
                 },
                 spec: {
