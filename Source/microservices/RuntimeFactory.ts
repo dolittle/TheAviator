@@ -3,20 +3,21 @@
 import { IRunContext } from '@dolittle/aviator.k8s';
 
 import { Runtime, MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
     constructor() {
         super('runtime');
     }
-    async create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Runtime> {
-        const configName = this.getConfigMapName(runContext, configuration, 'dolittle');
+    async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Runtime> {
+        const configName = this.getConfigMapName(id, configuration, 'dolittle');
         const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: this.getPodName(runContext, configuration),
+                    name: this.getPodName(id, configuration),
                     labels
                 },
                 spec: {
@@ -47,7 +48,7 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: this.getServiceName(runContext, configuration),
+                    name: this.getServiceName(id, configuration),
                     labels
                 },
                 spec: {

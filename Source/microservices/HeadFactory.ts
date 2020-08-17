@@ -2,20 +2,21 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
 import { Head, MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implements IHeadFactory {
     constructor() {
         super('head');
     }
-    async create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Head> {
-        const configName = this.getConfigMapName(runContext, configuration, 'dolittle');
+    async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Head> {
+        const configName = this.getConfigMapName(id, configuration, 'dolittle');
         const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: this.getPodName(runContext, configuration),
+                    name: this.getPodName(id, configuration),
                     labels
                 },
                 spec: {
@@ -42,7 +43,7 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: this.getServiceName(runContext, configuration),
+                    name: this.getServiceName(id, configuration),
                     labels
                 },
                 spec: {
