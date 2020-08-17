@@ -7,8 +7,8 @@ import * as path from 'path';
 import { Microservice } from '@dolittle/aviator.microservices';
 import { Scenario } from '@dolittle/testing.gherkin';
 
-import { IFlightPaths } from './index';
 import zeroPad from './zeroPad';
+import { IFlightPaths } from './index';
 
 /**
  * Represents an implementation of {IFlightPaths}

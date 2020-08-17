@@ -3,7 +3,19 @@
 
 import { Constructor } from '@dolittle/rudiments';
 
-import { IMicroserviceFactory, MicroserviceFactory, IConfigurationManager, ConfigurationManager, Platform, IHeadFactory, IRuntimeFactory, IMongoFactory, HeadFactory, RuntimeFactory, MongoFactory } from '@dolittle/aviator.microservices';
+import {
+    IMicroserviceFactory,
+    MicroserviceFactory,
+    IConfigurationManager,
+    ConfigurationManager,
+    Platform,
+    IHeadFactory,
+    IRuntimeFactory,
+    IMongoFactory,
+    HeadFactory,
+    RuntimeFactory,
+    MongoFactory
+} from '@dolittle/aviator.microservices';
 
 import {
     FlightRecorder,

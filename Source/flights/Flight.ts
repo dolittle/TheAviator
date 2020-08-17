@@ -3,10 +3,10 @@
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Scenario, emptyScenarioEnvironment } from '@dolittle/testing.gherkin';
+import { Scenario } from '@dolittle/testing.gherkin';
 import { MicroserviceScenarioEnvironment, emptyMicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
-import { IFlightPaths, IFlightRecorder, PreflightChecklist } from './index';
 import { Platform } from '@dolittle/aviator.microservices';
+import { IFlightPaths, IFlightRecorder, PreflightChecklist } from './index';
 
 /**
  * Represents a flight with a PreflightChecklist to perform.

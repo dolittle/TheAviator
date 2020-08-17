@@ -4,15 +4,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-
 import { Subject } from 'rxjs';
 
 import { ISerializer } from '@dolittle/serialization.json';
 import { Scenario, ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter, ScenarioResult } from '@dolittle/testing.gherkin';
 import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
+import { Microservice } from '@dolittle/aviator.microservices';
 
 import { Flight, IFlightRecorder } from './index';
-import { Microservice } from '@dolittle/aviator.microservices';
 
 /**
  * Represents an implementation of IFlightRecorder.

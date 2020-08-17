@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import * as stream from 'stream';
+import { BehaviorSubject } from 'rxjs';
+
 import { Guid } from '@dolittle/rudiments';
 import * as k8s from '@kubernetes/client-node';
-import { BehaviorSubject } from 'rxjs';
 
 export class NamespacedPod {
     private readonly _exec: k8s.Exec;
