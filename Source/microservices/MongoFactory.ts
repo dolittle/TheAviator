@@ -4,19 +4,23 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { Mongo, MicroserviceConfiguration, Platform, IMongoFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
 
 export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> implements IMongoFactory {
-    async create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Mongo> {
+    constructor() {
+        super('mongo');
+    }
+    async create(runContext: IRunContext, configuration: MicroserviceConfiguration): Promise<Mongo> {
+        const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: `${this.getBaseName(runContext, configuration)}mongo`,
-                    labels: this.getLabels(runContext, configuration)
+                    name: this.getPodName(runContext, configuration),
+                    labels
                 },
                 spec: {
                     containers: [
                         {
-                            name: 'mongo',
+                            name: this.type,
                             image: this.getContainerImage(configuration.platform),
                             ports: [
                                 {
@@ -32,11 +36,11 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: `${this.getBaseName(runContext, configuration)}mongo-service`,
-                    labels: this.getLabels(runContext, configuration)
+                    name: this.getServiceName(runContext, configuration),
+                    labels
                 },
                 spec: {
-                    selector: this.getLabels(runContext, configuration),
+                    selector: labels,
                     ports: [
                         {
                             port: MicroserviceConfiguration.mongoPort,

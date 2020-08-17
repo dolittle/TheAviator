@@ -21,7 +21,7 @@ export class MicroserviceActions implements IMicroserviceActions {
     /** @inheritdoc */
     async checkStatus(): Promise<string> {
         try {
-            const url = `${this.getHeadBaseUrl()}/api/Events`;
+            const url = `${this._microservice.head.apiUrl}/Events`;
             const response = await fetch(url, { timeout: 1000 });
             const result = await response.text();
             return result;
@@ -64,8 +64,7 @@ export class MicroserviceActions implements IMicroserviceActions {
     /** @inheritdoc */
     async getRuntimeMetrics(): Promise<string> {
         try {
-            const url = `${this._microservice.runtime.pod.address}:${this._microservice.runtime.metricsPort}/metrics`;
-            const response = await fetch(url, { timeout: 1000 });
+            const response = await fetch(this._microservice.runtime.metricsUrl, { timeout: 1000 });
             const result = await response.text();
             return result;
         } catch (ex) {
@@ -74,11 +73,11 @@ export class MicroserviceActions implements IMicroserviceActions {
     }
 
     private getUrlForCommittingEvents(tenantId: Guid, eventSource: Guid, publicEvent: boolean): string {
-        return `${this.getHeadBaseUrl()}/api/Events/${publicEvent ? 'Public/' : ''}${tenantId.toString()}/${eventSource.toString()}`;
+        return `${this._microservice.head.apiUrl}/Events/${publicEvent ? 'Public/' : ''}${tenantId.toString()}/${eventSource.toString()}`;
     }
 
     private getUrlForCommittingAggregateEvents(tenantId: Guid, eventSource: Guid, version: number): string {
-        return `${this.getHeadBaseUrl()}/api/Events/Aggregate/${tenantId.toString()}/${eventSource.toString()}/${version}`;
+        return `${this._microservice.head.apiUrl}/Events/Aggregate/${tenantId.toString()}/${eventSource.toString()}/${version}`;
     }
 
     private postCommitRequest(url: string, content: any) {
@@ -88,9 +87,5 @@ export class MicroserviceActions implements IMicroserviceActions {
             headers: { 'Content-Type': 'application/json' },
             timeout: 10000
         });
-    }
-
-    private getHeadBaseUrl() {
-        return `${this._microservice.head.pod.address}:${this._microservice.head.interactionPort}`;
     }
 }

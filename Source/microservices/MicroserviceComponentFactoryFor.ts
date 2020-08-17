@@ -4,18 +4,32 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, ConfigurationFiles, MicroserviceComponent, IMicroserviceComponentFactoryFor } from './index';
 
 export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
-    abstract create (runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<T>;
 
-    getBaseName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
+    constructor(protected readonly type: string) {
+    }
+
+    abstract create (runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
+
+    protected getBaseName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
         return `${runContext.id.toString()}-${configuration.identifier}-`;
     }
-    getLabels(runContext: IRunContext, configuration: MicroserviceConfiguration) {
+    protected getConfigMapName(runContext: IRunContext, configuration: MicroserviceConfiguration, configName: string) {
+        return `${this.getBaseName(runContext, configuration)}${this.type}-${configName}`;
+    }
+    protected getServiceName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
+        return `${this.getBaseName(runContext, configuration)}${this.type}-service`;
+    }
+    protected getPodName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
+        return `${this.getBaseName(runContext, configuration)}${this.type}`;
+    }
+    protected getLabels(runContext: IRunContext, configuration: MicroserviceConfiguration) {
         return {
             runContext: runContext.id.toString(),
-            microservice: configuration.identifier
+            microservice: configuration.identifier,
+            type: this.type
         };
     }
-    volumeMountsFromConfigurationFiles(configName: string, configurationFiles: ConfigurationFiles) {
+    protected volumeMountsFromConfigurationFiles(configName: string, configurationFiles: ConfigurationFiles) {
         return configurationFiles.map(configFile => {
             return {
                 mountPath: `${configurationFiles.rootPath}/${configFile.fileName}`,
@@ -24,7 +38,7 @@ export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComp
             };
         });
     }
-    configMapDataFromConfigurationFiles(configurationFiles: ConfigurationFiles) {
+    protected configMapDataFromConfigurationFiles(configurationFiles: ConfigurationFiles) {
         const data: any = {};
         configurationFiles.forEach(config => {
             data[config.fileName] = config.content;

@@ -7,4 +7,6 @@ export class Head extends MicroserviceComponent {
     constructor(pod: NamespacedPod, readonly microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }
+    get baseUrl() { return 'url/to/pod'; }
+    get apiUrl() { return `${this.baseUrl}:${MicroserviceConfiguration.headInteractionPort}/api`;}
 }

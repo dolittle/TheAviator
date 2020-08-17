@@ -4,23 +4,24 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { Head, MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
 
 export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implements IHeadFactory {
+    constructor() {
+        super('head');
+    }
     async create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Head> {
-        const configName = `${this.getBaseName(runContext, configuration)}head-dolittle`;
+        const configName = this.getConfigMapName(runContext, configuration, 'dolittle');
+        const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: `${this.getBaseName(runContext, configuration)}head`,
-                    labels: {
-                        runContext: runContext.id.toString(),
-                        microservice: configuration.identifier
-                    }
+                    name: this.getPodName(runContext, configuration),
+                    labels
                 },
                 spec: {
                     containers: [
                         {
-                            name: 'head',
+                            name: this.type,
                             image: this.getContainerImage(configuration.platform),
                             ports: [
                                 {
@@ -41,11 +42,11 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: `${this.getBaseName(runContext, configuration)}head-service`,
-                    labels: this.getLabels(runContext, configuration)
+                    name: this.getServiceName(runContext, configuration),
+                    labels
                 },
                 spec: {
-                    selector: this.getLabels(runContext, configuration),
+                    selector: labels,
                     ports: [
                         {
                             port: MicroserviceConfiguration.headInteractionPort,
@@ -60,7 +61,7 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                 kind: 'ConfigMap',
                 metadata: {
                     name: configName,
-                    labels: this.getLabels(runContext, configuration)
+                    labels
                 },
                 data: this.configMapDataFromConfigurationFiles(configurationFiles)
             }

@@ -10,6 +10,8 @@ export class Mongo extends MicroserviceComponent {
         super(pod, microserviceConfiguration);
     }
 
+    get clientUrl() { return `mongodb://pod/url:${MicroserviceConfiguration.mongoPort}`;}
+
     async dump(database: string, outputStream: stream.Writable) {
         const ws = await this.pod.exec(
             [

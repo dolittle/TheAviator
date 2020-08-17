@@ -116,8 +116,7 @@ export class EventStore implements IEventStore {
     }
 
     private async getMongoClient() {
-        const url = `mongodb://${this.microservice.eventStoreStorage.pod.address}:${this.microservice.eventStoreStorage.port}`;
-        const client = await MongoClient.connect(url, { useUnifiedTopology: true });
+        const client = await MongoClient.connect(this.microservice.eventStoreStorage.clientUrl, { useUnifiedTopology: true });
         return client;
     }
 }

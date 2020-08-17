@@ -7,4 +7,7 @@ export class Runtime extends MicroserviceComponent {
     constructor(pod: NamespacedPod, readonly microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }
+
+    get baseUrl() { return 'url/to/pod'; }
+    get metricsUrl() { return `${this.baseUrl}:${MicroserviceConfiguration.runtimeMetricsPort}/metrics`;}
 }

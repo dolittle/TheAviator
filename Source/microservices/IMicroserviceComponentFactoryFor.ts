@@ -4,5 +4,5 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, ConfigurationFiles, MicroserviceComponent } from './index';
 
 export interface IMicroserviceComponentFactoryFor<T extends MicroserviceComponent> {
-    create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<T>;
+    create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
 }

@@ -4,20 +4,24 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { Runtime, MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
 
 export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
+    constructor() {
+        super('runtime');
+    }
     async create(runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Runtime> {
-        const configName = `${this.getBaseName(runContext, configuration)}runtime-dolittle`;
+        const configName = this.getConfigMapName(runContext, configuration, 'dolittle');
+        const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: `${this.getBaseName(runContext, configuration)}runtime`,
-                    labels: this.getLabels(runContext, configuration)
+                    name: this.getPodName(runContext, configuration),
+                    labels
                 },
                 spec: {
                     containers: [
                         {
-                            name: 'runtime',
+                            name: this.type,
                             image: this.getContainerImage(configuration.platform),
                             ports: [
                                 {
@@ -42,11 +46,11 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: `${this.getBaseName(runContext, configuration)}runtime`,
-                    labels: this.getLabels(runContext, configuration)
+                    name: this.getServiceName(runContext, configuration),
+                    labels
                 },
                 spec: {
-                    selector: this.getLabels(runContext, configuration),
+                    selector: labels,
                     ports: [
                         {
                             port: MicroserviceConfiguration.runtimePublicPort,
@@ -71,7 +75,7 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                 kind: 'ConfigMap',
                 metadata: {
                     name: configName,
-                    labels: this.getLabels(runContext, configuration)
+                    labels
                 },
                 data: this.configMapDataFromConfigurationFiles(configurationFiles)
             }
