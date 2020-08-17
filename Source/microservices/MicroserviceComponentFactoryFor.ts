@@ -4,7 +4,6 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 
 import { Guid } from '@dolittle/rudiments';
 import { MicroserviceConfiguration, ConfigurationFiles, MicroserviceComponent, IMicroserviceComponentFactoryFor } from './index';
-import { ObjectID } from 'mongodb';
 
 export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
 
@@ -14,16 +13,16 @@ export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComp
     abstract create (id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
 
     protected getBaseName(id: Guid) {
-        return `${id.toString()}-`;
+        return `${this.type}-${id.toString()}`;
     }
     protected getConfigMapName(id: Guid, configName: string) {
-        return `${this.getBaseName(id)}${this.type}-${configName}`;
+        return `${this.getBaseName(id)}-${configName}`;
     }
     protected getServiceName(id: Guid) {
-        return `${this.getBaseName(id)}${this.type}-service`;
+        return `${this.getBaseName(id)}-service`;
     }
     protected getPodName(id: Guid) {
-        return `${this.getBaseName(id)}${this.type}`;
+        return `${this.getBaseName(id)}-pod`;
     }
     protected getLabels(runContext: IRunContext, configuration: MicroserviceConfiguration) {
         return {
