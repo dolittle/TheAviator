@@ -3,7 +3,7 @@
 
 import * as path from 'path';
 
-import { Mount, IRunContext, IPodFactory } from '@dolittle/aviator.k8s';
+import { IRunContext } from '@dolittle/aviator.k8s';
 import { Guid } from '@dolittle/rudiments';
 
 import { MicroserviceConfiguration, IConfigurationManager, RuntimeConfiguration } from './configuration';
@@ -20,15 +20,17 @@ import { Mongo } from './Mongo';
 export class MicroserviceFactory implements IMicroserviceFactory {
 
     constructor(
-        private readonly _configurationManager: IConfigurationManager,
-        private readonly _podFactory: IPodFactory) {
+        private readonly _configurationManager: IConfigurationManager) {
     }
 
     /** @inheritdoc */
     async create(workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
-        const eventStoreStoragePod = await runContext.addPod(this.createEventStoreStoragePod(workingDirectory, configuration, runContext.id));
-        const headPod = await runContext.addPod(this.createHeadPod(workingDirectory, configuration, runContext.id));
-        const runtimePod = await runContext.addPod(this.createRuntimePod(workingDirectory, configuration, runContext.id));
+        const eventStoreStoragePod = await runContext.createPod(
+            this.createEventStoreStoragePod(workingDirectory, configuration, runContext.id),
+            'event-store',
+            );
+        const headPod = await runContext.createPod(this.createHeadPod(workingDirectory, configuration, runContext.id));
+        const runtimePod = await runContext.createPod(this.createRuntimePod(workingDirectory, configuration, runContext.id));
 
 
         return new Microservice(

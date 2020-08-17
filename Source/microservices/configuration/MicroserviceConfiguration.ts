@@ -19,6 +19,12 @@ import { MicroserviceDefinition, Platform, shared } from '../index';
  * @class MicroserviceConfiguration
  */
 export class MicroserviceConfiguration {
+    static headInteractionPort = 5000;
+    static runtimePublicPort = 50052;
+    static runtimePrivatePort = 50053;
+    static runtimeUiInteractionPort = 81;
+    static runtimeMetricsPort = 9700;
+    static mongoPort = 27017;
     eventStoreForTenants: EventStoreTenantConfiguration[];
     tenants: Tenant[];
     runtime: RuntimeConfiguration;
@@ -42,7 +48,7 @@ export class MicroserviceConfiguration {
         const runtimeHost = `runtime-${this.identifier}`;
         const headHost = `head-${this.identifier}`;
 
-        this.runtime = new RuntimeConfiguration(runtimeHost, 50052, 50053);
+        this.runtime = new RuntimeConfiguration(runtimeHost, MicroserviceConfiguration.runtimePublicPort, MicroserviceConfiguration.runtimePrivatePort);
         this.head = new HeadConfiguration(headHost);
 
         this.eventStoreForTenants = tenants.map(tenant => new EventStoreTenantConfiguration(tenant, this.mongoHost));

@@ -5,9 +5,9 @@ import fs from 'fs';
 import path from 'path';
 import { Microservice } from '@dolittle/aviator.microservices';
 
-import { MicroserviceScenarioEnvironmentDefinition } from './index';
 import { ISerializer } from '@dolittle/serialization.json';
-import { Scenario, ScenarioEnvironment, emptyScenarioEnvironment } from '@dolittle/testing.gherkin';
+import { Scenario, ScenarioEnvironment } from '@dolittle/testing.gherkin';
+import { MicroserviceScenarioEnvironmentDefinition } from './index';
 
 const eventStoreDumpFolderName = 'eventStore';
 const containerOptionsFileExtension = '.json';

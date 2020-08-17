@@ -5,9 +5,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as Handlebars from 'handlebars';
 
-import { Mount } from '@dolittle/aviator.k8s';
-import { IConfigurationManager, ConfigurationTarget, MicroserviceConfiguration, ConfigurationTemplate } from './index';
 import templates from './templates';
+import { IConfigurationManager, ConfigurationTarget, MicroserviceConfiguration, ConfigurationTemplate, ConfigurationFile, ConfigurationFiles } from './index';
 
 const HeadConfig = 'head';
 const RuntimeConfig = 'runtime';
@@ -25,35 +24,35 @@ export class ConfigurationManager implements IConfigurationManager {
     /**
      * @inheritdoc
      */
-    generateForHead(configuration: MicroserviceConfiguration, workingDirectory: string): Mount[] {
+    generateForHead(configuration: MicroserviceConfiguration, workingDirectory: string): ConfigurationFiles {
         return this.generateFiles(configuration, HeadConfig, workingDirectory);
     }
 
     /**
      * @inheritdoc
      */
-    generateForRuntime(configuration: MicroserviceConfiguration, workingDirectory: string): Mount[] {
+    generateForRuntime(configuration: MicroserviceConfiguration, workingDirectory: string): ConfigurationFiles {
         return this.generateFiles(configuration, RuntimeConfig, workingDirectory);
     }
 
-    private generateFiles(configuration: MicroserviceConfiguration, target: ConfigurationTarget, workingDirectory: string) {
-        const mounts: Mount[] = [];
+    private generateFiles(configuration: MicroserviceConfiguration, target: ConfigurationTarget, workingDirectory: string): ConfigurationFiles {
+        const compiledConfigurations = new ConfigurationFiles('/app/.dolittle');
         const templatesForTarget = templates[target];
         for (const template of templatesForTarget) {
-            mounts.push(this.generateFile(configuration, target, template, workingDirectory));
+            compiledConfigurations.push(this.generateFile(configuration, target, template, workingDirectory));
         }
-        return mounts;
+        return compiledConfigurations;
     }
 
-    private generateFile(configuration: MicroserviceConfiguration, target: ConfigurationTarget, configurationTemplate: ConfigurationTemplate, workingDirectory: string): Mount {
-        const template = Handlebars.compile(configurationTemplate.content);
-        const result = template(configuration);
+    private generateFile(configuration: MicroserviceConfiguration, target: ConfigurationTarget, configurationTemplate: ConfigurationTemplate, workingDirectory: string): ConfigurationFile {
+        const template = Handlebars.compile(configurationTemplate.template);
+        const content = template(configuration);
         const destination = this.getAndEnsureHostPathFor(configuration, target, configurationTemplate.fileName, workingDirectory);
-        fs.writeFileSync(destination, result);
+        fs.writeFileSync(destination, content);
 
         return {
-            host: destination,
-            container: `/app/.dolittle/${configurationTemplate.fileName}`
+            fileName: configurationTemplate.fileName,
+            content
         };
     }
 

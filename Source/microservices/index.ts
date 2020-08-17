@@ -2,9 +2,18 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export * from './Platform';
+export * from './Platforms';
 export * from './Head';
 export * from './Runtime';
 export * from './Mongo';
+export * from './IMicroserviceComponentFactoryFor';
+export * from './MicroserviceComponentFactoryFor';
+export * from './IHeadFactory';
+export * from './IRuntimeFactory';
+export * from './IMongoFactory';
+export * from './HeadFactory';
+export * from './RuntimeFactory';
+export * from './MongoFactory';
 export * from './IMicroserviceActions';
 export * from './IMicroserviceFactory';
 export * from './MicroserviceComponent';

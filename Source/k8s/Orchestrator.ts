@@ -3,7 +3,7 @@
 
 import { KubeConfig, CoreV1Api, AppsV1Api } from '@kubernetes/client-node';
 import { Guid } from '@dolittle/rudiments';
-import { K8sConfiguration, IOrchestrator, IRunContext, IPodFactory, IRunContexts, RunContext } from './index';
+import { K8sConfiguration, IOrchestrator, IRunContext, IRunContexts, RunContext } from './index';
 
 
 export class Orchestrator implements IOrchestrator {
@@ -11,7 +11,7 @@ export class Orchestrator implements IOrchestrator {
     private readonly _coreApi: CoreV1Api;
     private readonly _appsApi: AppsV1Api;
 
-    constructor(private readonly _runContexts: IRunContexts, private readonly _podFactory: IPodFactory, options?: K8sConfiguration) {
+    constructor(private readonly _runContexts: IRunContexts, options?: K8sConfiguration) {
         this._config = this._createConfig(options);
         this._coreApi = this._config.makeApiClient(CoreV1Api);
         this._appsApi = this._config.makeApiClient(AppsV1Api);

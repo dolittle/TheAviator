@@ -6,8 +6,7 @@ import { ScenarioEnvironmentBuilder } from '@dolittle/testing.gherkin';
 import { IRunContext } from '@dolittle/aviator.k8s';
 import { IMicroserviceFactory, Microservice, Platform, MicroserviceConfiguration } from '@dolittle/aviator.microservices';
 
-import { MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition } from './index';
-import { GetMicroserviceScenarioDestination, GetMicroserviceDestination } from './MicroserviceScenarioEnvironment';
+import { MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition, GetMicroserviceScenarioDestination, GetMicroserviceDestination } from './index';
 
 export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentBuilder<MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition> {
     constructor(

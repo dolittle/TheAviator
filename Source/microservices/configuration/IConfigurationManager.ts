@@ -1,8 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Mount } from '@dolittle/aviator.k8s';
-import { MicroserviceConfiguration } from './index';
+import { MicroserviceConfiguration, ConfigurationFiles } from './index';
 
 /**
  * Defines a system that can manage configurations.
@@ -19,7 +18,7 @@ export interface IConfigurationManager {
      * @param {string} workingDirectory
      * @returns {Mount[]}
      */
-    generateForHead(configuration: MicroserviceConfiguration, workingDirectory: string): Mount[]
+    generateForHead(configuration: MicroserviceConfiguration, workingDirectory: string): ConfigurationFiles
 
     /**
      * Generates the configuration files for a Runtime.
@@ -28,7 +27,7 @@ export interface IConfigurationManager {
      * @param {string} workingDirectory
      * @returns {Mount[]}
      */
-    generateForRuntime(configuration: MicroserviceConfiguration, workingDirectory: string): Mount[]
+    generateForRuntime(configuration: MicroserviceConfiguration, workingDirectory: string): ConfigurationFiles
 }
 
 
