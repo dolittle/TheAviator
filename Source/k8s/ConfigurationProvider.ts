@@ -18,18 +18,19 @@ const environmentMap = {
 
 export class ConfigurationProvider {
     private static _instance: ConfigurationProvider;
-    private _configuration!: K8sConfiguration;
+    private _configuration!: K8sConfiguration | undefined;
 
+    private constructor() {}
     static get() {
         if (ConfigurationProvider._instance == null) {
             this._instance = new ConfigurationProvider();
         }
         return ConfigurationProvider._instance;
     }
-    provide(): K8sConfiguration {
+    provide(): K8sConfiguration | undefined {
         if (this._configuration == null) {
             const configuration = this._extractConfiguration();
-
+            this._configuration = configuration;
         }
         return this._configuration;
     }
