@@ -9,7 +9,8 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
         super('head');
     }
     async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Head> {
-        const configName = this.getConfigMapName(id, 'dolittle');
+        const volumeName = 'dolittle';
+        const configName = this.getConfigMapName(id, volumeName);
         const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
@@ -34,10 +35,16 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                                     name: 'public'
                                 }
                             ],
-                            volumeMounts: this.volumeMountsFromConfigurationFiles(configName, configurationFiles)
+                            volumeMounts: this.volumeMountsFromConfigurationFiles(volumeName, configurationFiles)
+                        }
+                    ],
+                    volumes: [
+                        {
+                            name: volumeName,
+                            configMap: {name: configName}
                         }
                     ]
-                }
+                },
             },
             {
                 apiVersion: 'v1',
