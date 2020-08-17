@@ -3,6 +3,7 @@
 
 export * from './Platform';
 export * from './Platforms';
+export * from './MicroserviceComponent';
 export * from './Head';
 export * from './Runtime';
 export * from './Mongo';
@@ -16,7 +17,6 @@ export * from './RuntimeFactory';
 export * from './MongoFactory';
 export * from './IMicroserviceActions';
 export * from './IMicroserviceFactory';
-export * from './MicroserviceComponent';
 export * from './Microservice';
 export * from './MicroserviceActions';
 export * from './MicroserviceDefinition';

@@ -3,9 +3,7 @@
 
 import { IRunContext } from '@dolittle/aviator.k8s';
 
-import { MicroserviceConfiguration } from './configuration';
-import { IEventStore, EventStore } from './eventStores';
-import { IMicroserviceActions, MicroserviceActions, Head, Runtime, Mongo } from './index';
+import { IMicroserviceActions, MicroserviceActions, Head, Runtime, Mongo, IEventStore, MicroserviceConfiguration, EventStore } from './index';
 
 /**
  * Represents a microservice.

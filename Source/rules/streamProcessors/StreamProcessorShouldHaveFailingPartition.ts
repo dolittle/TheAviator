@@ -6,7 +6,7 @@ import { Guid } from '@dolittle/rudiments';
 import { IRule, IRuleContext } from '@dolittle/rules';
 import { ScenarioWithThenSubject } from '@dolittle/testing.gherkin';
 
-import { MissingStreamProcessorState, StreamProcessorIsNotFailing, StreamProcessorDoesNotHaveFailingPartition } from './';
+import { MissingStreamProcessorState, StreamProcessorIsNotFailing, StreamProcessorDoesNotHaveFailingPartition } from './index';
 import { MicroserviceScenarioSubjectContent } from '../index';
 
 /**
