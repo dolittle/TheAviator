@@ -2,26 +2,28 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
 
+import { Guid } from '@dolittle/rudiments';
 import { MicroserviceConfiguration, ConfigurationFiles, MicroserviceComponent, IMicroserviceComponentFactoryFor } from './index';
+import { ObjectID } from 'mongodb';
 
 export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
 
     constructor(protected readonly type: string) {
     }
 
-    abstract create (runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
+    abstract create (id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
 
-    protected getBaseName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
-        return `${runContext.id.toString()}-${configuration.identifier}-`;
+    protected getBaseName(id: Guid, configuration: MicroserviceConfiguration) {
+        return `${id.toString()}-${configuration.identifier}-`;
     }
-    protected getConfigMapName(runContext: IRunContext, configuration: MicroserviceConfiguration, configName: string) {
-        return `${this.getBaseName(runContext, configuration)}${this.type}-${configName}`;
+    protected getConfigMapName(id: Guid, configuration: MicroserviceConfiguration, configName: string) {
+        return `${this.getBaseName(id, configuration)}${this.type}-${configName}`;
     }
-    protected getServiceName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
-        return `${this.getBaseName(runContext, configuration)}${this.type}-service`;
+    protected getServiceName(id: Guid, configuration: MicroserviceConfiguration) {
+        return `${this.getBaseName(id, configuration)}${this.type}-service`;
     }
-    protected getPodName(runContext: IRunContext, configuration: MicroserviceConfiguration) {
-        return `${this.getBaseName(runContext, configuration)}${this.type}`;
+    protected getPodName(id: Guid, configuration: MicroserviceConfiguration) {
+        return `${this.getBaseName(id, configuration)}${this.type}`;
     }
     protected getLabels(runContext: IRunContext, configuration: MicroserviceConfiguration) {
         return {

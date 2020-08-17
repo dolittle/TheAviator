@@ -12,6 +12,7 @@ import {
     MicroserviceConfiguration,
     IMongoFactory
 } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents an implementation of IMicroserviceFactory.
@@ -31,9 +32,10 @@ export class MicroserviceFactory implements IMicroserviceFactory {
 
     /** @inheritdoc */
     async create(workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
-        const head = await this._headFactory.create(runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
-        const runtime = await this._runtimeFactory.create(runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
-        const mongo = await this._mongoFactory.create(runContext, configuration);
+        const id = Guid.create();
+        const head = await this._headFactory.create(id, runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
+        const runtime = await this._runtimeFactory.create(id, runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
+        const mongo = await this._mongoFactory.create(id, runContext, configuration);
         return new Microservice(
             runContext,
             configuration,

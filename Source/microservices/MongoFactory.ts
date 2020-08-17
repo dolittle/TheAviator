@@ -3,19 +3,20 @@
 import { IRunContext } from '@dolittle/aviator.k8s';
 
 import { Mongo, MicroserviceConfiguration, Platform, IMongoFactory, MicroserviceComponentFactoryFor } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> implements IMongoFactory {
     constructor() {
         super('mongo');
     }
-    async create(runContext: IRunContext, configuration: MicroserviceConfiguration): Promise<Mongo> {
+    async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration): Promise<Mongo> {
         const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: this.getPodName(runContext, configuration),
+                    name: this.getPodName(id, configuration),
                     labels
                 },
                 spec: {
@@ -37,7 +38,7 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: this.getServiceName(runContext, configuration),
+                    name: this.getServiceName(id, configuration),
                     labels
                 },
                 spec: {
