@@ -13,17 +13,17 @@ export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComp
 
     abstract create (id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
 
-    protected getBaseName(id: Guid, configuration: MicroserviceConfiguration) {
-        return `${id.toString()}-${configuration.identifier}-`;
+    protected getBaseName(id: Guid) {
+        return `${id.toString()}-`;
     }
-    protected getConfigMapName(id: Guid, configuration: MicroserviceConfiguration, configName: string) {
-        return `${this.getBaseName(id, configuration)}${this.type}-${configName}`;
+    protected getConfigMapName(id: Guid, configName: string) {
+        return `${this.getBaseName(id)}${this.type}-${configName}`;
     }
-    protected getServiceName(id: Guid, configuration: MicroserviceConfiguration) {
-        return `${this.getBaseName(id, configuration)}${this.type}-service`;
+    protected getServiceName(id: Guid) {
+        return `${this.getBaseName(id)}${this.type}-service`;
     }
-    protected getPodName(id: Guid, configuration: MicroserviceConfiguration) {
-        return `${this.getBaseName(id, configuration)}${this.type}`;
+    protected getPodName(id: Guid) {
+        return `${this.getBaseName(id)}${this.type}`;
     }
     protected getLabels(runContext: IRunContext, configuration: MicroserviceConfiguration) {
         return {

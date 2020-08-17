@@ -10,14 +10,14 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
         super('runtime');
     }
     async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Runtime> {
-        const configName = this.getConfigMapName(id, configuration, 'dolittle');
+        const configName = this.getConfigMapName(id, 'dolittle');
         const labels = this.getLabels(runContext, configuration);
         const namespacedPod = await runContext.createPod(
             {
                 apiVersion: 'v1',
                 kind: 'Pod',
                 metadata: {
-                    name: this.getPodName(id, configuration),
+                    name: this.getPodName(id),
                     labels
                 },
                 spec: {
@@ -48,7 +48,7 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                 apiVersion: 'v1',
                 kind: 'Service',
                 metadata: {
-                    name: this.getServiceName(id, configuration),
+                    name: this.getServiceName(id),
                     labels
                 },
                 spec: {
