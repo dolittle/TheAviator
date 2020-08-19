@@ -29,12 +29,9 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
     }
 
     async start(): Promise<void> {
-        await this.connectConsumersToProducers();
-        await this.forEachMicroservice(_ => _.start());
     }
 
     async stop(): Promise<void> {
-        await this.disconnectConsumersFromProducers();
         await this.forEachMicroservice(_ => _.kill());
     }
 
@@ -54,34 +51,6 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
 
             await microservice.eventStore.dump(destinationDirectory);
         });
-    }
-
-    private async connectConsumersToProducers() {
-        for (const consumerName of Object.keys(this.definition.consumerToProducerMap)) {
-            const consumer = this.microservices[consumerName];
-            if (consumer) {
-                for (const producerDefinition of this.definition.consumerToProducerMap[consumerName]) {
-                    const producer = this.microservices[producerDefinition.name];
-                    if (producer) {
-                        await consumer.connectToProducer(producer);
-                    }
-                }
-            }
-        }
-    }
-
-    private async disconnectConsumersFromProducers() {
-        for (const consumerName of Object.keys(this.definition.consumerToProducerMap)) {
-            const consumer = this.microservices[consumerName];
-            if (consumer) {
-                for (const producerDefinition of this.definition.consumerToProducerMap[consumerName]) {
-                    const producer = this.microservices[producerDefinition.name];
-                    if (producer) {
-                        await consumer.disconnectFromProducer(producer);
-                    }
-                }
-            }
-        }
     }
 
     private writeConfigurationFiles() {
