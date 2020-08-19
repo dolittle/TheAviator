@@ -17,6 +17,7 @@ export class NamespacedPod {
         readonly uniqueName: string,
         readonly friendlyName: string,
         readonly containerImage: string,
+        readonly exposedPorts: readonly number[],
         config: k8s.KubeConfig) {
             this._exec = new k8s.Exec(config);
             this._attach = new k8s.Attach(config);
@@ -58,6 +59,12 @@ export class NamespacedPod {
     }
     async kill() {
         //TODO: KILL
+    }
+    async pause() {
+        //https://intellipaat.com/community/42981/how-to-stop-pause-a-pod-in-kubernetes
+    }
+    async resume() {
+        //https://intellipaat.com/community/42981/how-to-stop-pause-a-pod-in-kubernetes
     }
 
     private async captureOutputFromContainer() {

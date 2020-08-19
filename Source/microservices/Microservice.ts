@@ -3,7 +3,7 @@
 
 import { IRunContext } from '@dolittle/aviator.k8s';
 
-import { IMicroserviceActions, MicroserviceActions, Head, Runtime, Mongo, IEventStore, MicroserviceConfiguration, EventStore } from './index';
+import { IMicroserviceActions, MicroserviceActions, IHead, IRuntime, IMongo, IEventStore, MicroserviceConfiguration, EventStore } from './index';
 
 /**
  * Represents a microservice.
@@ -18,9 +18,9 @@ export class Microservice {
     constructor(
         private readonly _runContext: IRunContext,
         readonly configuration: MicroserviceConfiguration,
-        readonly head: Head,
-        readonly runtime: Runtime,
-        readonly eventStoreStorage: Mongo) {
+        readonly head: IHead,
+        readonly runtime: IRuntime,
+        readonly eventStoreStorage: IMongo) {
 
         this.actions = new MicroserviceActions(this);
         this.eventStore = new EventStore(this);
@@ -35,9 +35,7 @@ export class Microservice {
         // await this.runtime.start(new LogMessageWaitStrategy('Application started.'));
         // await this.head.start(new LogMessageWaitStrategy('Connected to runtime'));
 
-        await this._runContext.startPod(this.eventStoreStorage.pod);
-        await this._runContext.startPod(this.runtime.pod);
-        await this._runContext.startPod(this.head.pod);
+
     }
 
     /**
@@ -45,9 +43,9 @@ export class Microservice {
      *
      */
     async stop() {
-        await this._runContext.stopPod(this.head.pod);
-        await this._runContext.stopPod(this.runtime.pod);
-        await this._runContext.stopPod(this.eventStoreStorage.pod);
+        await this.head.stop();
+        await this.runtime.stop();
+        await this.eventStoreStorage.stop();
     }
 
     /**
@@ -55,9 +53,9 @@ export class Microservice {
      *
      */
     async restart() {
-        await this._runContext.restartPod(this.head.pod);
-        await this._runContext.restartPod(this.runtime.pod);
-        await this._runContext.restartPod(this.eventStoreStorage.pod);
+        await this.head.restart();
+        await this.runtime.restart();
+        await this.eventStoreStorage.restart();
     }
 
     /**
@@ -65,22 +63,15 @@ export class Microservice {
      *
      */
     async kill() {
-        await this._runContext.killPod(this.head.pod);
-        await this._runContext.killPod(this.runtime.pod);
-        await this._runContext.killPod(this.eventStoreStorage.pod);
+        await this.head.kill();
+        await this.runtime.kill();
+        await this.eventStoreStorage.kill();
 
-        // await this._containerEnvironment.removeNetwork(this.configuration.networkName);
     }
 
     async connectToProducer(producer: Microservice) {
-        // await this.head.connectToNetwork(producer.configuration.networkName);
-        // await this.runtime.connectToNetwork(producer.configuration.networkName);
-        // await this.eventStoreStorage.connectToNetwork(producer.configuration.networkName);
     }
 
     async disconnectFromProducer(producer: Microservice) {
-        // await this.head.disconnectFromNetwork(producer.configuration.networkName);
-        // await this.runtime.disconnectFromNetwork(producer.configuration.networkName);
-        // await this.eventStoreStorage.disconnectFromNetwork(producer.configuration.networkName);
     }
 }

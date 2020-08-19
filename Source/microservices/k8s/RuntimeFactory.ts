@@ -1,11 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
-
-import { Runtime, MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
 import { Guid } from '@dolittle/rudiments';
 
-export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
+import { MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles } from '../index';
+import { K8sMicroserviceComponentFactoryFor, Runtime,  } from './index';
+
+export class RuntimeFactory extends K8sMicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
     constructor() {
         super('runtime');
     }
@@ -31,10 +32,10 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                                     containerPort: MicroserviceConfiguration.runtimePublicPort,
                                     name: 'public'
                                 },
-                                {
-                                    containerPort: MicroserviceConfiguration.runtimePrivatePort,
-                                    name: 'private'
-                                },
+                                // {
+                                //     containerPort: MicroserviceConfiguration.runtimePrivatePort,
+                                //     name: 'private'
+                                // },
                                 {
                                     containerPort: MicroserviceConfiguration.runtimeMetricsPort,
                                     name: 'metrics'
@@ -66,11 +67,11 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                             name: 'public',
                             targetPort: 'public' as any
                         },
-                        {
-                            port: MicroserviceConfiguration.runtimePrivatePort,
-                            name: 'private',
-                            targetPort: 'private' as any
-                        },
+                        // {
+                        //     port: MicroserviceConfiguration.runtimePrivatePort,
+                        //     name: 'private',
+                        //     targetPort: 'private' as any
+                        // },
                         {
                             port: MicroserviceConfiguration.runtimeMetricsPort,
                             name: 'metrics',

@@ -1,10 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
-import { Head, MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
 import { Guid } from '@dolittle/rudiments';
 
-export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implements IHeadFactory {
+import { MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles } from '../index';
+import { K8sMicroserviceComponentFactoryFor, Head } from './index';
+
+export class HeadFactory extends K8sMicroserviceComponentFactoryFor<Head> implements IHeadFactory {
     constructor() {
         super('head');
     }
@@ -30,10 +32,10 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                                     containerPort: MicroserviceConfiguration.headInteractionPort,
                                     name: 'api'
                                 },
-                                {
-                                    containerPort: MicroserviceConfiguration.runtimePublicPort,
-                                    name: 'public'
-                                }
+                                // {
+                                //     containerPort: MicroserviceConfiguration.runtimePublicPort,
+                                //     name: 'public'
+                                // }
                             ],
                             volumeMounts: this.volumeMountsFromConfigurationFiles(volumeName, configurationFiles)
                         }

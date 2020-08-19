@@ -4,9 +4,10 @@
 import stream from 'stream';
 import { NamespacedPod } from '@dolittle/aviator.k8s';
 
-import { MicroserviceComponent, MicroserviceConfiguration } from './index';
+import { MicroserviceConfiguration, IMongo } from '../index';
+import { K8sMicroserviceComponent } from './index';
 
-export class Mongo extends MicroserviceComponent {
+export class Mongo extends K8sMicroserviceComponent implements IMongo {
     constructor(pod: NamespacedPod, microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }

@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { Microservice, MicroserviceComponent } from '@dolittle/aviator.microservices';
+import { Microservice, IMicroserviceComponent } from '@dolittle/aviator.microservices';
 
 import { ISerializer } from '@dolittle/serialization.json';
 import { Scenario, ScenarioEnvironment } from '@dolittle/testing.gherkin';
@@ -88,14 +88,14 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
         for (const microservice of Object.values(this.microservices)) {
             const microservicePath = this._getMicroserviceDestination(microservice);
 
-            const writeOptionsFile = (microserviceComponent: MicroserviceComponent) => {
-                const containerOptionsFile = path.join(microservicePath, `${microserviceComponent.pod.friendlyName}${containerOptionsFileExtension}`);
+            const writeOptionsFile = (microserviceComponent: IMicroserviceComponent) => {
+                const containerOptionsFile = path.join(microservicePath, `${microserviceComponent.friendlyName}${containerOptionsFileExtension}`);
                 const configOutput = JSON.parse(JSON.stringify(microserviceComponent.pod));
 
-                // configOutput.boundPorts = {};
-                // for (const [k, v] of microserviceComponent.boundPorts) {
-                //     configOutput.boundPorts[k] = v;
-                // }
+                configOutput.boundPorts = {};
+                for (const [k, v] of microserviceComponent.exposedPorts) {
+                    configOutput.boundPorts[k] = v;
+                }
                 fs.writeFileSync(containerOptionsFile, this._serializer.toJSON(configOutput));
             };
 

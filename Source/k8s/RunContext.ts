@@ -6,7 +6,6 @@ import { Guid } from '@dolittle/rudiments';
 
 import { IRunContext, NamespacedPod } from './index';
 
-
 export class RunContext implements IRunContext {
     private readonly _pods: NamespacedPod[];
     private readonly _namespace: string;
@@ -44,6 +43,7 @@ export class RunContext implements IRunContext {
             pod.metadata?.name!,
             pod.spec?.containers[0].name!,
             pod.spec?.containers[0].image!,
+            pod.spec?.containers[0].ports?.map(port => port.containerPort) || [],
             this._config);
     }
     startPod(pod: NamespacedPod): Promise<void> {

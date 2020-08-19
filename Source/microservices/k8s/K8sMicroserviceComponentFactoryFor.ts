@@ -1,11 +1,12 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
-
 import { Guid } from '@dolittle/rudiments';
-import { MicroserviceConfiguration, ConfigurationFiles, MicroserviceComponent, IMicroserviceComponentFactoryFor } from './index';
 
-export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
+import { MicroserviceConfiguration, ConfigurationFiles, IMicroserviceComponentFactoryFor } from '../index';
+import { K8sMicroserviceComponent } from './index';
+
+export abstract class K8sMicroserviceComponentFactoryFor<T extends K8sMicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
 
     constructor(protected readonly type: string) {
     }

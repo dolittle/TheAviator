@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { NamespacedPod } from '@dolittle/aviator.k8s';
 
-import { MicroserviceComponent, MicroserviceConfiguration } from './index';
+import { MicroserviceConfiguration } from '../index';
+import { K8sMicroserviceComponent } from './index';
 
-export class Runtime extends MicroserviceComponent {
+export class Runtime extends K8sMicroserviceComponent {
     constructor(pod: NamespacedPod, readonly microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }
