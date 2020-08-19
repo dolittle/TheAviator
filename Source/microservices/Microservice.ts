@@ -68,10 +68,4 @@ export class Microservice {
         await this.eventStoreStorage.kill();
 
     }
-
-    async connectToProducer(producer: Microservice) {
-    }
-
-    async disconnectFromProducer(producer: Microservice) {
-    }
 }

@@ -11,6 +11,7 @@ export abstract class K8sMicroserviceComponent implements IMicroserviceComponent
     get uniqueName() { return this.pod.uniqueName; }
     get friendlyName() { return this.pod.friendlyName; }
     get exposedPorts() { return this.pod.exposedPorts; }
+    get outputStream() { return this.pod.outputStream; }
 
     stop(): Promise<void> {
         return this.pod.stop();

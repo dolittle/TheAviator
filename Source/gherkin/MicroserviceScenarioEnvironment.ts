@@ -29,8 +29,8 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
     }
 
     async start(): Promise<void> {
-        await this.forEachMicroservice(_ => _.start());
         await this.connectConsumersToProducers();
+        await this.forEachMicroservice(_ => _.start());
     }
 
     async stop(): Promise<void> {
@@ -90,12 +90,8 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
 
             const writeOptionsFile = (microserviceComponent: IMicroserviceComponent) => {
                 const containerOptionsFile = path.join(microservicePath, `${microserviceComponent.friendlyName}${containerOptionsFileExtension}`);
-                const configOutput = JSON.parse(JSON.stringify(microserviceComponent.pod));
+                const configOutput = JSON.parse(JSON.stringify(microserviceComponent));
 
-                configOutput.boundPorts = {};
-                for (const [k, v] of microserviceComponent.exposedPorts) {
-                    configOutput.boundPorts[k] = v;
-                }
                 fs.writeFileSync(containerOptionsFile, this._serializer.toJSON(configOutput));
             };
 

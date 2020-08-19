@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { ISerializer } from '@dolittle/serialization.json';
 import { Scenario, ReportingScenarioResult, IScenarioConverter, IScenarioResultConverter, ScenarioResult, ReportingScenario } from '@dolittle/testing.gherkin';
 import { MicroserviceScenarioEnvironment } from '@dolittle/aviator.gherkin';
-import { Microservice, MicroserviceComponent } from '@dolittle/aviator.microservices';
+import { Microservice, IMicroserviceComponent } from '@dolittle/aviator.microservices';
 
 import { Flight, IFlightRecorder } from './index';
 
@@ -78,18 +78,18 @@ export class FlightRecorder implements IFlightRecorder {
 
     private collectLogsFor(environment: MicroserviceScenarioEnvironment) {
         Object.values(environment.microservices).forEach(microservice => {
-            microservice.head.pod.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
-            microservice.runtime.pod.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
-            microservice.eventStoreStorage.pod.outputStream.subscribe((stream: any) => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
+            microservice.head.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
+            microservice.runtime.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
+            microservice.eventStoreStorage.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
         });
     }
 
-    private getOutputStreamWriterFor(microservice: Microservice, component: MicroserviceComponent) {
+    private getOutputStreamWriterFor(microservice: Microservice, component: IMicroserviceComponent) {
         return (data: Buffer) => {
             const filtered = data.filter(_ => (_ === 0xA || _ === 0xD) || _ >= 0x20 && (_ < 0x80 || _ >= 0xA0));
 
             const currentScenarioPath = this._flight.paths.forMicroserviceInScenario(this._currentScenario, microservice);
-            const currentContainerPath = path.join(currentScenarioPath, `${component.pod.friendlyName}.log`);
+            const currentContainerPath = path.join(currentScenarioPath, `${component.friendlyName}.log`);
 
             fs.appendFileSync(currentContainerPath, filtered);
         };
