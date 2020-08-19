@@ -1,8 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { NamespacedPod } from '@dolittle/aviator.k8s';
+import { MicroserviceConfiguration } from '@dolittle/aviator.microservices';
 
-import { MicroserviceConfiguration } from '../index';
 import { K8sMicroserviceComponent } from './index';
 
 export class Runtime extends K8sMicroserviceComponent {

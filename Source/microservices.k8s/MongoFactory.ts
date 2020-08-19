@@ -1,9 +1,9 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
+import { MicroserviceConfiguration, Platform, IMongoFactory } from '@dolittle/aviator.microservices';
 import { Guid } from '@dolittle/rudiments';
 
-import { MicroserviceConfiguration, Platform, IMongoFactory } from '../index';
 import { K8sMicroserviceComponentFactoryFor, Mongo } from './index';
 
 export class MongoFactory extends K8sMicroserviceComponentFactoryFor<Mongo> implements IMongoFactory {

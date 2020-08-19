@@ -3,6 +3,7 @@
 
 import { IRunContext } from '@dolittle/aviator.k8s';
 
+import { Guid } from '@dolittle/rudiments';
 import {
     Microservice,
     IMicroserviceFactory,
@@ -12,7 +13,6 @@ import {
     MicroserviceConfiguration,
     IMongoFactory
 } from './index';
-import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents an implementation of IMicroserviceFactory.

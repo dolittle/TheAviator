@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import stream from 'stream';
-import { NamespacedPod } from '@dolittle/aviator.k8s';
 
-import { MicroserviceConfiguration, IMongo } from '../index';
+import { NamespacedPod } from '@dolittle/aviator.k8s';
+import { MicroserviceConfiguration, IMongo } from '@dolittle/aviator.microservices';
+
 import { K8sMicroserviceComponent } from './index';
 
 export class Mongo extends K8sMicroserviceComponent implements IMongo {

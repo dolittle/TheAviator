@@ -1,7 +1,8 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import { NamespacedPod } from '@dolittle/aviator.k8s';
-import { MicroserviceConfiguration, IMicroserviceComponent } from '../index';
+import { MicroserviceConfiguration, IMicroserviceComponent } from '@dolittle/aviator.microservices';
 
 export abstract class K8sMicroserviceComponent implements IMicroserviceComponent {
     constructor(protected readonly pod: NamespacedPod, readonly microserviceConfiguration: MicroserviceConfiguration) {
