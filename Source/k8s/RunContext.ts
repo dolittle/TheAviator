@@ -41,18 +41,15 @@ export class RunContext implements IRunContext {
             pod,
             service,
             configMap);
-
         await namespacedPod.captureOutputFromContainer();
 
         return namespacedPod;
     }
 
-    restart(): Promise<void> {
-        return this.onAllPods(pod => pod.restart());
-    }
-
     async clear(): Promise<void> {
-        await this.onAllPods(pod => pod.kill());
+        await this.onAllPods(pod => {
+            if (pod.status !== 'Killed') pod.kill();
+        });
         this._pods.length = 0;
     }
 

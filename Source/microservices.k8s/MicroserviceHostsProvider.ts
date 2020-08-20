@@ -7,9 +7,9 @@ import { Guid } from '@dolittle/rudiments';
 export class MicroserviceHostsProvider implements IMicroserviceHostsProvider {
     provide(uniqueId: Guid): { mongo: string; runtime: string; head: string; } {
         return {
-            head: `head-${uniqueId.toString()}-service`,
-            mongo: `mongo-${uniqueId.toString()}-service`,
-            runtime: `runtime-${uniqueId.toString()}-service`
+            head: `head-${uniqueId.toString()}-service.integration-tests.svc.cluster.local`,
+            mongo: `mongo-${uniqueId.toString()}-service.integration-tests.svc.cluster.local`,
+            runtime: `runtime-${uniqueId.toString()}-service.integration-tests.svc.cluster.local`
         };
     }
 

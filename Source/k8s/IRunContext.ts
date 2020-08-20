@@ -11,7 +11,6 @@ export interface IRunContext {
 
     createPod(pod: V1Pod, service?: V1Service, configMap?: V1ConfigMap): Promise<NamespacedPod>
 
-    restart(): Promise<void>
     /**
      * Clear all resources.
      *
