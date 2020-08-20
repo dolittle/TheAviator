@@ -7,18 +7,11 @@ import { NamespacedPod } from './index';
 
 export interface IRunContext {
     readonly id: Guid;
-    readonly pods: NamespacedPod[];
-
-    start(): Promise<void>
-    restart(): Promise<void>
-    kill(): Promise<void>
+    readonly pods: readonly NamespacedPod[];
 
     createPod(pod: V1Pod, service?: V1Service, configMap?: V1ConfigMap): Promise<NamespacedPod>
-    startPod(pod: NamespacedPod): Promise<void>
-    stopPod(pod: NamespacedPod): Promise<void>
-    restartPod(pod: NamespacedPod): Promise<void>
-    killPod(pod: NamespacedPod): Promise<void>
 
+    restart(): Promise<void>
     /**
      * Clear all resources.
      *

@@ -78,21 +78,17 @@ export class FlightRecorder implements IFlightRecorder {
 
     private collectLogsFor(environment: MicroserviceScenarioEnvironment) {
         Object.values(environment.microservices).forEach(microservice => {
-            microservice.head.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.head)));
-            microservice.runtime.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.runtime)));
-            microservice.eventStoreStorage.outputStream.subscribe(stream => stream.on('data', this.getOutputStreamWriterFor(microservice, microservice.eventStoreStorage)));
+            microservice.head.outputStream.subscribe(data => this.appendOutput(microservice, microservice.head, data));
+            microservice.runtime.outputStream.subscribe(data => this.appendOutput(microservice, microservice.runtime, data));
+            microservice.eventStoreStorage.outputStream.subscribe(data => this.appendOutput(microservice, microservice.eventStoreStorage, data));
         });
     }
 
-    private getOutputStreamWriterFor(microservice: Microservice, component: IMicroserviceComponent) {
-        return (data: Buffer) => {
-            const filtered = data.filter(_ => (_ === 0xA || _ === 0xD) || _ >= 0x20 && (_ < 0x80 || _ >= 0xA0));
+    private appendOutput(microservice: Microservice, component: IMicroserviceComponent, data: string) {
+        const currentScenarioPath = this._flight.paths.forMicroserviceInScenario(this._currentScenario, microservice);
+        const currentContainerPath = path.join(currentScenarioPath, `${component.friendlyName}.log`);
 
-            const currentScenarioPath = this._flight.paths.forMicroserviceInScenario(this._currentScenario, microservice);
-            const currentContainerPath = path.join(currentScenarioPath, `${component.friendlyName}.log`);
-
-            fs.appendFileSync(currentContainerPath, filtered);
-        };
+        fs.appendFileSync(currentContainerPath, data);
     }
 
     private writePreflightChecklist() {
