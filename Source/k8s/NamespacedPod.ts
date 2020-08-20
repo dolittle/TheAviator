@@ -120,13 +120,13 @@ export class NamespacedPod {
 
     async waitTillReady() {
         try {
-            await retry({ interval: 200 }, async (callback, results) => {
+            await retry({ times: 20, interval: 500 }, async (callback, results) => {
                 const status = await this._coreApi.readNamespacedPodStatus(this._pod.metadata?.name!, this.namespace);
                 const body = status.body;
                 if (body.status?.phase !== 'Running') {
                     callback(new Error('Running'));
                 } else {
-                    callback(null);
+                    return;
                 }
             });
         } catch (err) {
