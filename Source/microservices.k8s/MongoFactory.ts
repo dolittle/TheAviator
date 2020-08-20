@@ -59,6 +59,6 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
     }
 
     private getContainerImage(platform: Platform): string {
-        return `dolittle/mongodb:${platform.runtimeVersion}`;
+        return `dolittle/mongodb:${platform.dolittleMongoVersion}`;
     }
 }

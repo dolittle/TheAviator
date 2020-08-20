@@ -13,7 +13,7 @@ export class Mongo extends MicroserviceComponent implements IMongo {
         super(pod, microserviceConfiguration);
     }
 
-    get clientUrl() { return `mongodb://pod/url:${MicroserviceConfiguration.mongoPort}`;}
+    get clientUrl() { return `mongodb://${this.microserviceConfiguration.eventStoreForTenants[0].server}:${MicroserviceConfiguration.mongoPort}`;}
 
     async dump(database: string, outputStream: stream.Writable) {
         const ws = await this.pod.exec(

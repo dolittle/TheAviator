@@ -9,6 +9,6 @@ export class Head extends MicroserviceComponent implements IHead {
     constructor(pod: NamespacedPod, microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }
-    get baseUrl() { return 'url/to/pod'; }
+    get baseUrl() { return this.microserviceConfiguration.head.host; }
     get apiUrl() { return `${this.baseUrl}:${MicroserviceConfiguration.headInteractionPort}/api`; }
 }

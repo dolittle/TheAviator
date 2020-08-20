@@ -10,6 +10,6 @@ export class Runtime extends MicroserviceComponent {
         super(pod, microserviceConfiguration);
     }
 
-    get baseUrl() { return 'url/to/pod'; }
+    get baseUrl() { return this.microserviceConfiguration.runtime.host; }
     get metricsUrl() { return `${this.baseUrl}:${MicroserviceConfiguration.runtimeMetricsPort}/metrics`;}
 }
