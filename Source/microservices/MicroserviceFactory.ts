@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IRunContext } from '@dolittle/aviator.k8s';
-
+import { Guid } from '@dolittle/rudiments';
 import {
     Microservice,
     IMicroserviceFactory,
@@ -12,7 +12,6 @@ import {
     MicroserviceConfiguration,
     IMongoFactory
 } from './index';
-import { Guid } from '@dolittle/rudiments';
 
 /**
  * Represents an implementation of IMicroserviceFactory.
@@ -31,14 +30,14 @@ export class MicroserviceFactory implements IMicroserviceFactory {
     }
 
     /** @inheritdoc */
-    async create(workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
-        const id = Guid.create();
-        const head = await this._headFactory.create(id, runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
-        const runtime = await this._runtimeFactory.create(id, runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
-        const mongo = await this._mongoFactory.create(id, runContext, configuration);
+    async create(runningId: Guid, workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
+        const head = await this._headFactory.create(runningId, runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
+        const runtime = await this._runtimeFactory.create(runningId, runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
+        const mongo = await this._mongoFactory.create(runningId, runContext, configuration);
         return new Microservice(
             runContext,
-            configuration,
+            configuration.name,
+            configuration.eventStoreForTenants,
             head,
             runtime,
             mongo);

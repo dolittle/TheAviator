@@ -11,11 +11,14 @@ import {
     Platform,
     IHeadFactory,
     IRuntimeFactory,
-    IMongoFactory,
+    IMongoFactory
+} from '@dolittle/aviator.microservices';
+import {
     HeadFactory,
     RuntimeFactory,
-    MongoFactory
-} from '@dolittle/aviator.microservices';
+    MongoFactory,
+    MicroserviceHostsProvider,
+} from '@dolittle/aviator.microservices.k8s';
 
 import {
     FlightRecorder,
@@ -95,6 +98,7 @@ export class Aviator {
             runContext,
             flightPaths.base,
             this.microserviceFactory,
+            new MicroserviceHostsProvider(),
             this.serializer,
             (scenario, microservice) => flightPaths.forMicroserviceInScenario(scenario,  microservice),
             microservice => flightPaths.forMicroservice(microservice));

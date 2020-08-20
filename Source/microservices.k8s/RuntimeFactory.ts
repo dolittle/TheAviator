@@ -1,14 +1,16 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
-import { Head, MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles, MicroserviceComponentFactoryFor } from './index';
 import { Guid } from '@dolittle/rudiments';
+import { MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
 
-export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implements IHeadFactory {
+import { MicroserviceComponentFactoryFor, Runtime,  } from './index';
+
+export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
     constructor() {
-        super('head');
+        super('runtime');
     }
-    async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Head> {
+    async create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles: ConfigurationFiles): Promise<Runtime> {
         const volumeName = 'dolittle';
         const configName = this.getConfigMapName(id, volumeName);
         const labels = this.getLabels(runContext, configuration);
@@ -27,13 +29,17 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                             image: this.getContainerImage(configuration.platform),
                             ports: [
                                 {
-                                    containerPort: MicroserviceConfiguration.headInteractionPort,
-                                    name: 'api'
-                                },
-                                {
                                     containerPort: MicroserviceConfiguration.runtimePublicPort,
                                     name: 'public'
-                                }
+                                },
+                                // {
+                                //     containerPort: MicroserviceConfiguration.runtimePrivatePort,
+                                //     name: 'private'
+                                // },
+                                {
+                                    containerPort: MicroserviceConfiguration.runtimeMetricsPort,
+                                    name: 'metrics'
+                                },
                             ],
                             volumeMounts: this.volumeMountsFromConfigurationFiles(volumeName, configurationFiles)
                         }
@@ -44,7 +50,7 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                             configMap: {name: configName}
                         }
                     ]
-                },
+                }
             },
             {
                 apiVersion: 'v1',
@@ -57,9 +63,19 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                     selector: labels,
                     ports: [
                         {
-                            port: MicroserviceConfiguration.headInteractionPort,
-                            name: 'api',
-                            targetPort: 'api' as any
+                            port: MicroserviceConfiguration.runtimePublicPort,
+                            name: 'public',
+                            targetPort: 'public' as any
+                        },
+                        // {
+                        //     port: MicroserviceConfiguration.runtimePrivatePort,
+                        //     name: 'private',
+                        //     targetPort: 'private' as any
+                        // },
+                        {
+                            port: MicroserviceConfiguration.runtimeMetricsPort,
+                            name: 'metrics',
+                            targetPort: 'metrics' as any
                         }
                     ]
                 }
@@ -74,10 +90,10 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                 data: this.configMapDataFromConfigurationFiles(configurationFiles)
             }
         );
-        return new Head(namespacedPod, configuration);
+        return new Runtime(namespacedPod, configuration);
     }
 
     private getContainerImage(platform: Platform): string {
-        return `dolittle/integrationtests-head-${platform.language}:${platform.headVersion}`;
+        return `dolittle/runtime:${platform.runtimeVersion}`;
     }
 }

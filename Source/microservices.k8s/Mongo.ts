@@ -2,11 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import stream from 'stream';
+
 import { NamespacedPod } from '@dolittle/aviator.k8s';
+import { MicroserviceConfiguration, IMongo } from '@dolittle/aviator.microservices';
 
-import { MicroserviceComponent, MicroserviceConfiguration } from './index';
+import { MicroserviceComponent } from './index';
 
-export class Mongo extends MicroserviceComponent {
+export class Mongo extends MicroserviceComponent implements IMongo {
     constructor(pod: NamespacedPod, microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }

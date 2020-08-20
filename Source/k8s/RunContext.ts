@@ -6,10 +6,10 @@ import { Guid } from '@dolittle/rudiments';
 
 import { IRunContext, NamespacedPod } from './index';
 
-
 export class RunContext implements IRunContext {
     private readonly _pods: NamespacedPod[];
     private readonly _namespace: string;
+
     constructor(
         readonly id: Guid,
         private readonly _config: KubeConfig,
@@ -18,18 +18,9 @@ export class RunContext implements IRunContext {
         this._pods = [];
         this._namespace = this._config.contexts[0].namespace!;
     }
-    get pods(): NamespacedPod[] { return this._pods; };
 
-    start(): Promise<void> {
-        const x = {metadata: {}} as V1ConfigMap;
-        return this.onAllPods(pod => pod.start());
-    }
-    restart(): Promise<void> {
-        return this.onAllPods(pod => pod.restart());
-    }
-    kill(): Promise<void> {
-        return this.onAllPods(pod => pod.kill());
-    }
+    get pods(): readonly NamespacedPod[] { return this._pods; };
+
     async createPod(pod: V1Pod, service?: V1Service, configMap?: V1ConfigMap): Promise<NamespacedPod> {
         if (service != null) await this._coreApi.createNamespacedService(this._namespace, service);
         if (configMap != null) await this._coreApi.createNamespacedConfigMap(this._namespace, configMap);
@@ -38,26 +29,28 @@ export class RunContext implements IRunContext {
             this._namespace,
             pod
         );
-        return new NamespacedPod(
+        const namespacedPod =  new NamespacedPod(
             this.id,
             this._namespace,
             pod.metadata?.name!,
             pod.spec?.containers[0].name!,
             pod.spec?.containers[0].image!,
-            this._config);
+            pod.spec?.containers[0].ports?.map(port => port.containerPort) || [],
+            this._config,
+            this._coreApi,
+            pod,
+            service,
+            configMap);
+
+        await namespacedPod.captureOutputFromContainer();
+
+        return namespacedPod;
     }
-    startPod(pod: NamespacedPod): Promise<void> {
-        return pod.start();
+
+    restart(): Promise<void> {
+        return this.onAllPods(pod => pod.restart());
     }
-    stopPod(pod: NamespacedPod): Promise<void> {
-        return pod.stop();
-    }
-    restartPod(pod: NamespacedPod): Promise<void> {
-        return pod.restart();
-    }
-    killPod(pod: NamespacedPod): Promise<void> {
-        return pod.kill();
-    }
+
     async clear(): Promise<void> {
         await this.onAllPods(pod => pod.kill());
         this._pods.length = 0;

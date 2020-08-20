@@ -3,24 +3,13 @@
 
 export * from './Platform';
 export * from './Platforms';
-export * from './MicroserviceComponent';
-export * from './Head';
-export * from './Runtime';
-export * from './Mongo';
-export * from './IMicroserviceComponentFactoryFor';
-export * from './MicroserviceComponentFactoryFor';
-export * from './IHeadFactory';
-export * from './IRuntimeFactory';
-export * from './IMongoFactory';
-export * from './HeadFactory';
-export * from './RuntimeFactory';
-export * from './MongoFactory';
 export * from './IMicroserviceActions';
 export * from './IMicroserviceFactory';
 export * from './Microservice';
 export * from './MicroserviceActions';
 export * from './MicroserviceDefinition';
 export * from './MicroserviceFactory';
+export * from './components';
 export * from './configuration';
 export * as shared from './shared';
 export * from './eventStores';

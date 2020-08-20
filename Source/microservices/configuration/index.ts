@@ -13,4 +13,5 @@ export * from './HeadConfiguration';
 export * from './IConfigurationManager';
 export * from './RuntimeConfiguration';
 export * from './MicroserviceConfiguration';
+export * from './IMicroserviceHostsProvider';
 export * from './ConfigurationManager';

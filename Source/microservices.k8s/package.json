@@ -1,5 +1,5 @@
 {
-    "name": "@dolittle/aviator",
+    "name": "@dolittle/aviator.microservices.k8s",
     "version": "1.0.0-rc.14",
     "description": "",
     "author": "",
@@ -17,8 +17,7 @@
     "homepage": "https://github.com/dolittle/TheAviator#readme",
     "files": [
         "Distribution",
-        "**/*.ts",
-        "cleanup.sh"
+        "**/*.ts"
     ],
     "main": "Distribution/index.js",
     "types": "Distribution/index.d.ts",
@@ -33,14 +32,10 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/aviator.flights": "1.0.0-rc.14",
-        "@dolittle/aviator.gherkin": "1.0.0-rc.14",
         "@dolittle/aviator.k8s": "1.0.0-rc.14",
-        "@dolittle/aviator.microservices.k8s": "1.0.0-rc.14",
         "@dolittle/aviator.microservices": "1.0.0-rc.14",
-        "@dolittle/aviator.rules": "1.0.0-rc.14",
-        "@dolittle/testing.gherkin": "0.2.1",
-        "@dolittle/rudiments": "3.1.0",
-        "@dolittle/serialization.json": "3.1.0"
+        "@dolittle/rudiments": "3.1.0"
+    },
+    "devDependencies": {
     }
 }

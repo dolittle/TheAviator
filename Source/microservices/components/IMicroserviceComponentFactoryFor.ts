@@ -4,8 +4,9 @@
 import { Guid } from '@dolittle/rudiments';
 import { IRunContext } from '@dolittle/aviator.k8s';
 
-import { MicroserviceConfiguration, ConfigurationFiles, MicroserviceComponent } from './index';
+import { MicroserviceConfiguration, ConfigurationFiles } from '../index';
+import { IMicroserviceComponent } from './index';
 
-export interface IMicroserviceComponentFactoryFor<T extends MicroserviceComponent> {
+export interface IMicroserviceComponentFactoryFor<T extends IMicroserviceComponent> {
     create(id: Guid, runContext: IRunContext, configuration: MicroserviceConfiguration, configurationFiles?: ConfigurationFiles): Promise<T>;
 }

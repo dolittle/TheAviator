@@ -8,11 +8,7 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        {"path": "../flights"},
-        {"path": "../gherkin"},
         {"path": "../k8s"},
         {"path": "../microservices"},
-        {"path": "../microservices.k8s"},
-        {"path": "../rules"},
     ]
 }

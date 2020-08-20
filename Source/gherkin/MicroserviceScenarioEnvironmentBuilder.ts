@@ -4,15 +4,17 @@
 import { ISerializer } from '@dolittle/serialization.json';
 import { ScenarioEnvironmentBuilder } from '@dolittle/testing.gherkin';
 import { IRunContext } from '@dolittle/aviator.k8s';
-import { IMicroserviceFactory, Microservice, Platform, MicroserviceConfiguration } from '@dolittle/aviator.microservices';
+import { IMicroserviceFactory, Microservice, Platform, MicroserviceConfiguration, IMicroserviceHostsProvider } from '@dolittle/aviator.microservices';
 
 import { MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition, GetMicroserviceScenarioDestination, GetMicroserviceDestination } from './index';
+import { Guid } from '@dolittle/rudiments';
 
 export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentBuilder<MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition> {
     constructor(
         private readonly _runContext: IRunContext,
         private readonly _workingDirectory: string,
         private readonly _microserviceFactory: IMicroserviceFactory,
+        private readonly _microserviceHostsProvider: IMicroserviceHostsProvider,
         private readonly _serializer: ISerializer,
         private readonly _getMicroserviceScenarioDestination: GetMicroserviceScenarioDestination,
         private readonly _getMicroserviceDestination: GetMicroserviceDestination) {
@@ -24,8 +26,8 @@ export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentB
         const microservices: { [key: string]: Microservice } = {};
 
         const configurations = this.prepareMicroserviceConfigurations(platform, definition);
-        for (const configuration of configurations) {
-            const microservice = await this._microserviceFactory.create(this._workingDirectory, configuration, this._runContext);
+        for (const { configuration, runningId } of configurations) {
+            const microservice = await this._microserviceFactory.create(runningId, this._workingDirectory, configuration, this._runContext);
             microservices[configuration.name] = microservice;
         }
 
@@ -34,17 +36,24 @@ export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentB
     }
 
 
-    private prepareMicroserviceConfigurations(platform: Platform, definition: MicroserviceScenarioEnvironmentDefinition): MicroserviceConfiguration[] {
-        const microserviceConfigurations: MicroserviceConfiguration[] = [];
+    private prepareMicroserviceConfigurations(platform: Platform, definition: MicroserviceScenarioEnvironmentDefinition): {configuration: MicroserviceConfiguration, runningId: Guid}[] {
+        const configurationsAndIds: {configuration: MicroserviceConfiguration, runningId: Guid}[] = [];
         for (const microserviceDefinition of definition.microservices) {
-            microserviceConfigurations.push(MicroserviceConfiguration.from(platform, microserviceDefinition));
+            const configuration = MicroserviceConfiguration.from(platform, microserviceDefinition, this._microserviceHostsProvider);
+            const runningId = Guid.create();
+            configuration.setHostsFor(runningId);
+            configurationsAndIds.push({
+                configuration,
+                runningId
+            });
         }
 
+        const configurations = configurationsAndIds.map(_ => _.configuration);
         for (const consumerDefinition of definition.microservices) {
-            const consumer = microserviceConfigurations.find(_ => _.name === consumerDefinition.name);
+            const consumer = configurations.find(_ => _.name === consumerDefinition.name);
             if (consumer) {
                 for (const producerDefinition of consumerDefinition.producers) {
-                    const producer = microserviceConfigurations.find(_ => _.name === producerDefinition.name);
+                    const producer = configurations.find(_ => _.name === producerDefinition.name);
                     if (producer) {
                         consumer.addProducer(producer);
                     }
@@ -52,6 +61,6 @@ export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentB
             }
         }
 
-        return microserviceConfigurations;
+        return configurationsAndIds;
     }
 }

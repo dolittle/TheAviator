@@ -36,6 +36,7 @@
         "@dolittle/rudiments": "3.1.0",
         "handlebars": "4.7.6",
         "mongodb": "3.5.9",
+        "rxjs": "6.6.2",
         "node-fetch": "2.6.0",
         "uuid-mongodb": "2.3.0"
     },
