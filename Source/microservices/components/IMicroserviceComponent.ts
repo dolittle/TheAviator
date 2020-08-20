@@ -9,7 +9,7 @@ export interface IMicroserviceComponent {
     readonly friendlyName: string
     readonly exposedPorts: readonly number[]
     readonly microserviceConfiguration: MicroserviceConfiguration;
-    readonly outputStream: BehaviorSubject<string>
+    readonly outputStream: BehaviorSubject<NodeJS.ReadWriteStream>
 
     stop(): Promise<void>
     continue(): Promise<void>

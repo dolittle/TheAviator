@@ -28,18 +28,6 @@ export class Microservice {
     }
 
     /**
-     * Starts the microservice.
-     *
-     */
-    async start() {
-        // await this.eventStoreStorage.start(new LogMessageWaitStrategy('waiting for connections on port 27017'));
-        // await this.runtime.start(new LogMessageWaitStrategy('Application started.'));
-        // await this.head.start(new LogMessageWaitStrategy('Connected to runtime'));
-
-
-    }
-
-    /**
      * Stops the microservice.
      *
      */
@@ -67,6 +55,5 @@ export class Microservice {
         await this.head.kill();
         await this.runtime.kill();
         await this.eventStoreStorage.kill();
-
     }
 }
