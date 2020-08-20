@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { IRunContext } from '@dolittle/aviator.k8s';
+import { Guid } from '@dolittle/rudiments';
 
 import { Microservice, MicroserviceConfiguration } from './index';
 
@@ -20,5 +21,5 @@ export interface IMicroserviceFactory {
      * @param {IRunContexts} runContext
      * @returns {Promise<Microservice>}
      */
-    create(workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice>
+    create(runningId: Guid, workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice>
 }

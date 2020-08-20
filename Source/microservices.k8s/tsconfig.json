@@ -8,6 +8,7 @@
     "include": ["**/*.ts"],
     "exclude": ["node_modules", "Distribution"],
     "references": [
-        {"path": "../k8s"}
+        {"path": "../k8s"},
+        {"path": "../microservices"},
     ]
 }

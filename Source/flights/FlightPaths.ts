@@ -45,7 +45,7 @@ export class FlightPaths implements IFlightPaths {
 
     /** @inheritdoc */
     forMicroservice(microservice: Microservice): string {
-        const directory = path.join(this.base, '_microservices', microservice.configuration.name);
+        const directory = path.join(this.base, '_microservices', microservice.name);
         this.ensureDirectory(directory);
         return directory;
     }
@@ -53,7 +53,7 @@ export class FlightPaths implements IFlightPaths {
     /** @inheritdoc */
     forMicroserviceInScenario(scenario: Scenario, microservice: Microservice): string {
         const scenarioDirectory = this.forScenario(scenario);
-        const directory = path.join(scenarioDirectory, '_microservices', microservice.configuration.name);
+        const directory = path.join(scenarioDirectory, '_microservices', microservice.name);
         this.ensureDirectory(directory);
         return directory;
     }
@@ -61,7 +61,7 @@ export class FlightPaths implements IFlightPaths {
     /** @inheritdoc */
     forMicroserviceInContext(scenario: Scenario, microservice: Microservice): string {
         const scenarioDirectory = this.forScenarioContext(scenario);
-        const directory = path.join(scenarioDirectory, '_microservices', microservice.configuration.name);
+        const directory = path.join(scenarioDirectory, '_microservices', microservice.name);
         this.ensureDirectory(directory);
         return directory;
     }

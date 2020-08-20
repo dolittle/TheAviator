@@ -3,9 +3,9 @@
 import { NamespacedPod } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration } from '@dolittle/aviator.microservices';
 
-import { K8sMicroserviceComponent } from './index';
+import { MicroserviceComponent } from './index';
 
-export class Runtime extends K8sMicroserviceComponent {
+export class Runtime extends MicroserviceComponent {
     constructor(pod: NamespacedPod, readonly microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }

@@ -30,14 +30,14 @@ export class MicroserviceFactory implements IMicroserviceFactory {
     }
 
     /** @inheritdoc */
-    async create(workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
-        const id = Guid.create();
-        const head = await this._headFactory.create(id, runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
-        const runtime = await this._runtimeFactory.create(id, runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
-        const mongo = await this._mongoFactory.create(id, runContext, configuration);
+    async create(runningId: Guid, workingDirectory: string, configuration: MicroserviceConfiguration, runContext: IRunContext): Promise<Microservice> {
+        const head = await this._headFactory.create(runningId, runContext, configuration, this._configurationManager.generateForHead(configuration, workingDirectory));
+        const runtime = await this._runtimeFactory.create(runningId, runContext, configuration, this._configurationManager.generateForRuntime(configuration, workingDirectory));
+        const mongo = await this._mongoFactory.create(runningId, runContext, configuration);
         return new Microservice(
             runContext,
-            configuration,
+            configuration.name,
+            configuration.eventStoreForTenants,
             head,
             runtime,
             mongo);

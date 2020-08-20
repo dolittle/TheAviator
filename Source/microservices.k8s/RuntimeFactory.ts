@@ -4,9 +4,9 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { Guid } from '@dolittle/rudiments';
 import { MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
 
-import { K8sMicroserviceComponentFactoryFor, Runtime,  } from './index';
+import { MicroserviceComponentFactoryFor, Runtime,  } from './index';
 
-export class RuntimeFactory extends K8sMicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
+export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> implements IRuntimeFactory {
     constructor() {
         super('runtime');
     }

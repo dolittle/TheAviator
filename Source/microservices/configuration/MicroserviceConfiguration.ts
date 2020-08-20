@@ -8,7 +8,8 @@ import {
     Tenant,
     EventStoreTenantConfiguration,
     EventHorizonConfiguration,
-    EventHorizonTenantConsentConfiguration
+    EventHorizonTenantConsentConfiguration,
+    IMicroserviceHostsProvider
 } from './index';
 import { MicroserviceDefinition, Platform, shared } from '../index';
 
@@ -25,36 +26,28 @@ export class MicroserviceConfiguration {
     static runtimeUiInteractionPort = 81;
     static runtimeMetricsPort = 9700;
     static mongoPort = 27017;
-    eventStoreForTenants: EventStoreTenantConfiguration[];
+
+    eventStoreForTenants!: EventStoreTenantConfiguration[];
     tenants: Tenant[];
-    runtime: RuntimeConfiguration;
-    head: HeadConfiguration;
-    mongoHost: string;
+    runtime!: RuntimeConfiguration;
+    head!: HeadConfiguration;
     producers: MicroserviceConfiguration[] = [];
     consumers: MicroserviceConfiguration[] = [];
     consents: EventHorizonTenantConsentConfiguration[] = [];
     eventHorizons: EventHorizonConfiguration[] = [];
     identifier: string;
 
-    constructor(
+    private constructor(
         readonly platform: Platform,
         readonly name: string,
         identifier: Guid,
-        tenants: Guid[]) {
+        tenants: Guid[],
+        private readonly _hostsProvider: IMicroserviceHostsProvider) {
 
         this.identifier = identifier.toString();
 
-        this.mongoHost = `mongo-${this.identifier}`;
-        const runtimeHost = `runtime-${this.identifier}`;
-        const headHost = `head-${this.identifier}`;
-
-        this.runtime = new RuntimeConfiguration(runtimeHost, MicroserviceConfiguration.runtimePublicPort, MicroserviceConfiguration.runtimePrivatePort);
-        this.head = new HeadConfiguration(headHost);
-
-        this.eventStoreForTenants = tenants.map(tenant => new EventStoreTenantConfiguration(tenant, this.mongoHost));
         this.tenants = tenants.map(tenant => new Tenant(tenant));
     }
-
     /**
      * Adds a MicroserviceConfiguration for a producer.
      *
@@ -84,8 +77,16 @@ export class MicroserviceConfiguration {
         }
     }
 
-    static from(platform: Platform, definition: MicroserviceDefinition) {
-        const configuration = new MicroserviceConfiguration(platform, definition.name, definition.identifier, definition.tenants);
+    setHostsFor(uniqueId: Guid) {
+        const hosts = this._hostsProvider.provide(uniqueId);
+
+        this.runtime = new RuntimeConfiguration(hosts.runtime, MicroserviceConfiguration.runtimePublicPort, MicroserviceConfiguration.runtimePrivatePort);
+        this.head = new HeadConfiguration(hosts.head);
+
+        this.eventStoreForTenants = this.tenants.map(tenant => new EventStoreTenantConfiguration(Guid.as(tenant.tenantId), hosts.mongo));
+    }
+    static from(platform: Platform, definition: MicroserviceDefinition, hostsProvider: IMicroserviceHostsProvider) {
+        const configuration = new MicroserviceConfiguration(platform, definition.name, definition.identifier, definition.tenants, hostsProvider);
         return configuration;
     }
 }

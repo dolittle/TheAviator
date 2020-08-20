@@ -3,7 +3,7 @@
 
 import { IRunContext } from '@dolittle/aviator.k8s';
 
-import { IMicroserviceActions, MicroserviceActions, IHead, IRuntime, IMongo, IEventStore, MicroserviceConfiguration, EventStore } from './index';
+import { IMicroserviceActions, MicroserviceActions, IHead, IRuntime, IMongo, IEventStore, EventStore, EventStoreTenantConfiguration } from './index';
 
 /**
  * Represents a microservice.
@@ -17,7 +17,8 @@ export class Microservice {
 
     constructor(
         private readonly _runContext: IRunContext,
-        readonly configuration: MicroserviceConfiguration,
+        readonly name: string,
+        readonly eventStoreConfigurations: readonly EventStoreTenantConfiguration[],
         readonly head: IHead,
         readonly runtime: IRuntime,
         readonly eventStoreStorage: IMongo) {

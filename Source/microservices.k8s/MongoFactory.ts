@@ -4,9 +4,9 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, Platform, IMongoFactory } from '@dolittle/aviator.microservices';
 import { Guid } from '@dolittle/rudiments';
 
-import { K8sMicroserviceComponentFactoryFor, Mongo } from './index';
+import { MicroserviceComponentFactoryFor, Mongo } from './index';
 
-export class MongoFactory extends K8sMicroserviceComponentFactoryFor<Mongo> implements IMongoFactory {
+export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> implements IMongoFactory {
     constructor() {
         super('mongo');
     }

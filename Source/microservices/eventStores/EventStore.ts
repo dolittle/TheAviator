@@ -42,7 +42,7 @@ export class EventStore implements IEventStore {
      */
     async getStreamProcessorState(tenantId: Guid, eventProcessorId: Guid, scopeId: Guid, sourceStreamId: Guid): Promise<any> {
         try {
-            const eventStoresForTenants = this.microservice.configuration.eventStoreForTenants.filter(_ => _.tenantId);
+            const eventStoresForTenants = this.microservice.eventStoreConfigurations.filter(_ => _.tenantId);
             if (eventStoresForTenants.length !== 1) {
                 return null;
             }
@@ -69,7 +69,7 @@ export class EventStore implements IEventStore {
      */
     async dump(destination: string): Promise<string[]> {
         const backups: string[] = [];
-        for (const eventStoreForTenant of this.microservice.configuration.eventStoreForTenants) {
+        for (const eventStoreForTenant of this.microservice.eventStoreConfigurations) {
             const destinationFile = path.join(destination, `backup-for-tenant-${eventStoreForTenant.tenantId}`);
             backups.push(destinationFile);
             const targetStream = fs.createWriteStream(destinationFile) as any as stream.Writable;
@@ -86,7 +86,7 @@ export class EventStore implements IEventStore {
     async clear(): Promise<void> {
         try {
             const client = await this.getMongoClient();
-            for (const eventStoreForTenant of this.microservice.configuration.eventStoreForTenants) {
+            for (const eventStoreForTenant of this.microservice.eventStoreConfigurations) {
                 const db = client.db(eventStoreForTenant.database);
                 const collections = await db.collections();
                 for (const collection of collections) {
@@ -100,7 +100,7 @@ export class EventStore implements IEventStore {
 
     private async findDocumentsInCollection(tenantId: Guid, collectionName: string, filter: FilterQuery<any>): Promise<any[]> {
         try {
-            const eventStoresForTenants = this.microservice.configuration.eventStoreForTenants.filter(_ => _.tenantId);
+            const eventStoresForTenants = this.microservice.eventStoreConfigurations.filter(_ => _.tenantId);
             if (eventStoresForTenants.length !== 1) {
                 return [];
             }

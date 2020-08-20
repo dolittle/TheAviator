@@ -3,9 +3,9 @@
 import { NamespacedPod } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, IHead } from '@dolittle/aviator.microservices';
 
-import { K8sMicroserviceComponent } from './index';
+import { MicroserviceComponent } from './index';
 
-export class Head extends K8sMicroserviceComponent implements IHead {
+export class Head extends MicroserviceComponent implements IHead {
     constructor(pod: NamespacedPod, microserviceConfiguration: MicroserviceConfiguration) {
         super(pod, microserviceConfiguration);
     }

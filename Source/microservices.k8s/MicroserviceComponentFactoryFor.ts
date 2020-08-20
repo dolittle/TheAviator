@@ -4,9 +4,9 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { Guid } from '@dolittle/rudiments';
 import { MicroserviceConfiguration, ConfigurationFiles, IMicroserviceComponentFactoryFor } from '@dolittle/aviator.microservices';
 
-import { K8sMicroserviceComponent } from './index';
+import { MicroserviceComponent } from './index';
 
-export abstract class K8sMicroserviceComponentFactoryFor<T extends K8sMicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
+export abstract class MicroserviceComponentFactoryFor<T extends MicroserviceComponent> implements IMicroserviceComponentFactoryFor<T> {
 
     constructor(protected readonly type: string) {
     }

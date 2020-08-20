@@ -4,9 +4,9 @@ import { IRunContext } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
 import { Guid } from '@dolittle/rudiments';
 
-import { K8sMicroserviceComponentFactoryFor, Head } from './index';
+import { MicroserviceComponentFactoryFor, Head } from './index';
 
-export class HeadFactory extends K8sMicroserviceComponentFactoryFor<Head> implements IHeadFactory {
+export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implements IHeadFactory {
     constructor() {
         super('head');
     }

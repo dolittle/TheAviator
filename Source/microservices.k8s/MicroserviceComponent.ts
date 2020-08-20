@@ -4,7 +4,7 @@
 import { NamespacedPod } from '@dolittle/aviator.k8s';
 import { MicroserviceConfiguration, IMicroserviceComponent } from '@dolittle/aviator.microservices';
 
-export abstract class K8sMicroserviceComponent implements IMicroserviceComponent {
+export abstract class MicroserviceComponent implements IMicroserviceComponent {
     constructor(protected readonly pod: NamespacedPod, readonly microserviceConfiguration: MicroserviceConfiguration) {
     }
 
