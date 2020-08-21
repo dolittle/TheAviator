@@ -4,7 +4,7 @@
 import { KubeConfig, CoreV1Api, AppsV1Api } from '@kubernetes/client-node';
 import { Guid } from '@dolittle/rudiments';
 
-import { K8sConfiguration, IOrchestrator, IRunContext, IRunContexts, RunContext } from './index';
+import { IOrchestrator, IRunContext, IRunContexts, RunContext } from './index';
 
 
 export class Orchestrator implements IOrchestrator {
@@ -12,31 +12,23 @@ export class Orchestrator implements IOrchestrator {
     private readonly _coreApi: CoreV1Api;
     private readonly _appsApi: AppsV1Api;
 
-    constructor(private readonly _runContexts: IRunContexts, options?: K8sConfiguration) {
-        this._config = this._createConfig(options);
+    constructor(private readonly _runContexts: IRunContexts) {
+        this._config = this._createConfig();
         this._coreApi = this._config.makeApiClient(CoreV1Api);
         this._appsApi = this._config.makeApiClient(AppsV1Api);
     }
+    get runContexts() { return this._runContexts; }
 
-    async createRun(): Promise<IRunContext> {
+    async createRun(namespace: string): Promise<IRunContext> {
         const runId = Guid.create();
-        const runContext = new RunContext(runId, this._config, this._coreApi, this._appsApi);
+        const runContext = new RunContext(runId, namespace, this._config, this._coreApi);
         this._runContexts.add(runContext);
         return runContext;
     }
 
-    private _createConfig(options?: K8sConfiguration): KubeConfig {
+    private _createConfig(): KubeConfig {
         const config = new KubeConfig();
-        if (options == null) {
-            config.loadFromDefault();
-        } else {
-            config.loadFromOptions({
-                contexts: [options.context],
-                users: [options.user],
-                clusters: [options.cluster],
-                currentContext: options.cluster.name
-            });
-        }
+        config.loadFromDefault();
         return config;
     }
 }

@@ -8,15 +8,13 @@ import { IRunContext, NamespacedPod } from './index';
 
 export class RunContext implements IRunContext {
     private readonly _pods: NamespacedPod[];
-    private readonly _namespace: string;
 
     constructor(
         readonly id: Guid,
+        private readonly _namespace: string,
         private readonly _config: KubeConfig,
-        private readonly _coreApi: CoreV1Api,
-        private readonly _appsApi: AppsV1Api) {
+        private readonly _coreApi: CoreV1Api) {
         this._pods = [];
-        this._namespace = this._config.contexts[0].namespace!;
     }
 
     get pods(): readonly NamespacedPod[] { return this._pods; };

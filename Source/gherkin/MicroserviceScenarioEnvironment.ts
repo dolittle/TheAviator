@@ -59,9 +59,9 @@ export class MicroserviceScenarioEnvironment extends ScenarioEnvironment<Microse
 
             const writeOptionsFile = (microserviceComponent: IMicroserviceComponent) => {
                 const containerOptionsFile = path.join(microservicePath, `${microserviceComponent.friendlyName}${containerOptionsFileExtension}`);
-                const configOutput = JSON.parse(JSON.stringify(microserviceComponent));
+                const configOutput = JSON.parse(JSON.stringify({})); //TODO:
 
-                fs.writeFileSync(containerOptionsFile, this._serializer.toJSON(configOutput));
+                fs.writeFileSync(containerOptionsFile, this._serializer.toJSON(configOutput, 4));
             };
 
             writeOptionsFile(microservice.head);

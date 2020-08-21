@@ -13,11 +13,12 @@ import {
     IRuntimeFactory,
     IMongoFactory
 } from '@dolittle/aviator.microservices';
+
 import {
     HeadFactory,
     RuntimeFactory,
     MongoFactory,
-    MicroserviceHostsProvider,
+    MicroserviceHostsProvider
 } from '@dolittle/aviator.microservices.k8s';
 
 import {
@@ -45,10 +46,24 @@ import {
     ScenarioFor
 } from '@dolittle/testing.gherkin';
 
-import { ISerializer, Serializer } from '@dolittle/serialization.json';
-import { MicroserviceScenarioContext, MicroserviceScenarioEnvironmentBuilder } from '@dolittle/aviator.gherkin';
-import { IRunContext, IOrchestrator, Orchestrator, IRunContexts, RunContexts, K8sConfiguration, ConfigurationProvider } from '@dolittle/aviator.k8s';
+import {
+    ISerializer,
+    Serializer
+} from '@dolittle/serialization.json';
 
+import {
+    MicroserviceScenarioContext,
+    MicroserviceScenarioEnvironmentBuilder
+} from '@dolittle/aviator.gherkin';
+
+import {
+    IRunContext,
+    IOrchestrator,
+    Orchestrator,
+    IRunContexts,
+    RunContexts
+} from '@dolittle/aviator.k8s';
+import { AviatorConfiguration } from './index';
 
 export class Aviator {
     readonly runContexts: IRunContexts;
@@ -66,9 +81,9 @@ export class Aviator {
     readonly specificationConverter: ISpecificationConverter;
     readonly specificationResultConverter: ISpecificationResultConverter;
 
-    private constructor(readonly platform: Platform, k8sConfig: K8sConfiguration | undefined) {
+    private constructor(readonly platform: Platform, readonly configuration: AviatorConfiguration) {
         this.runContexts = new RunContexts();
-        this.orchestrator = new Orchestrator(this.runContexts, k8sConfig);
+        this.orchestrator = new Orchestrator(this.runContexts);
         this.serializer = new Serializer();
         this.headFactory = new HeadFactory();
         this.runtimeFactory = new RuntimeFactory();
@@ -83,12 +98,12 @@ export class Aviator {
         this.scenarioResultConverter = new ScenarioResultConverter(this.specificationResultConverter);
     }
 
-    static getFor(platform: Platform, k8sConfig?: K8sConfiguration) {
-        return new Aviator(platform, k8sConfig || ConfigurationProvider.get().provide());
+    static getFor(platform: Platform, configuration: AviatorConfiguration) {
+        return new Aviator(platform, configuration);
     }
 
     async performPreflightChecklist(...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<Flight> {
-        const runContext = await this.orchestrator.createRun();
+        const runContext = await this.orchestrator.createRun(this.configuration.namespace);
         const flight = await this.performPreflightChecklistInContext(runContext, ...scenarios);
         return flight;
     }
@@ -109,7 +124,7 @@ export class Aviator {
         flight.setRecorder(new FlightRecorder(flight, this.scenarioConverter, this.scenarioResultConverter, this.serializer));
         reporter.observe(flight);
         const flightControl = new FlightInspection(flight, this.specificationRunner);
-        // await flightControl.runPreflightCheck();
+        await flightControl.runPreflightCheck();
         return flight;
     }
 }
