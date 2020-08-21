@@ -45,7 +45,7 @@ export class FlightRecorder implements IFlightRecorder {
 
     /** @inheritdoc */
     conclude() {
-        const json = this._serializer.toJSON(this._scenarioResultsPerContext);
+        const json = this._serializer.toJSON(this._scenarioResultsPerContext, 4);
         const resultFilePath = path.join(this._flight.paths.base, 'results.json');
         fs.writeFileSync(resultFilePath, json);
     }
@@ -55,7 +55,7 @@ export class FlightRecorder implements IFlightRecorder {
         const reportingResult = this._scenarioResultConverter.convert(result);
         const currentScenarioPathPath = this._flight.paths.forScenario(result.scenario);
         const resultFilePath = path.join(currentScenarioPathPath, 'result.json');
-        const json = this._serializer.toJSON(reportingResult);
+        const json = this._serializer.toJSON(reportingResult, 4);
         fs.writeFileSync(resultFilePath, json);
 
         if (!this._scenarioResultsPerContext.hasOwnProperty(result.scenario.contextName)) {
@@ -106,7 +106,7 @@ export class FlightRecorder implements IFlightRecorder {
             }
         }
 
-        const serialized = this._serializer.toJSON(checklist);
+        const serialized = this._serializer.toJSON(checklist, 4);
         const outputFile = path.join(this._flight.paths.base, 'preflight-checklist.json');
 
         fs.writeFileSync(outputFile, serialized);
