@@ -1,6 +1,6 @@
 {
     "name": "@dolittle/aviator.microservices",
-    "version": "1.0.0-rc.17",
+    "version": "1.0.0-rc.18",
     "description": "",
     "author": "",
     "license": "MIT",
@@ -32,7 +32,7 @@
         "lint:fix": "gulp lint-fix --gulpfile ../../node_modules/@dolittle/typescript.build/Gulpfile.js"
     },
     "dependencies": {
-        "@dolittle/aviator.k8s": "1.0.0-rc.17",
+        "@dolittle/aviator.k8s": "1.0.0-rc.18",
         "@dolittle/rudiments": "3.1.0",
         "handlebars": "4.7.6",
         "mongodb": "3.5.9",
