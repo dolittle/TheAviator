@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
-import { MicroserviceConfiguration, Platform, IMongoFactory } from '@dolittle/aviator.microservices';
+import { MicroserviceConfiguration, Infrastructure, IMongoFactory } from '@dolittle/aviator.microservices';
 import { Guid } from '@dolittle/rudiments';
 
 import { MicroserviceComponentFactoryFor, Mongo } from './index';
@@ -24,7 +24,7 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
                     containers: [
                         {
                             name: this.type,
-                            image: this.getContainerImage(configuration.platform),
+                            image: configuration.platform.mongoImage,
                             ports: [
                                 {
                                     containerPort: MicroserviceConfiguration.mongoPort,
@@ -56,9 +56,5 @@ export class MongoFactory extends MicroserviceComponentFactoryFor<Mongo> impleme
             }
         );
         return new Mongo(namespacedPod, configuration);
-    }
-
-    private getContainerImage(platform: Platform): string {
-        return `dolittle/mongodb:${platform.dolittleMongoVersion}`;
     }
 }

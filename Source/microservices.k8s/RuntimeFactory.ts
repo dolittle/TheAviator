@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
 import { Guid } from '@dolittle/rudiments';
-import { MicroserviceConfiguration, Platform, IRuntimeFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
+import { MicroserviceConfiguration, Infrastructure, IRuntimeFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
 
 import { MicroserviceComponentFactoryFor, Runtime,  } from './index';
 
@@ -26,7 +26,7 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
                     containers: [
                         {
                             name: this.type,
-                            image: this.getContainerImage(configuration.platform),
+                            image: configuration.platform.runtimeImage,
                             ports: [
                                 {
                                     containerPort: MicroserviceConfiguration.runtimePublicPort,
@@ -91,9 +91,5 @@ export class RuntimeFactory extends MicroserviceComponentFactoryFor<Runtime> imp
             }
         );
         return new Runtime(namespacedPod, configuration);
-    }
-
-    private getContainerImage(platform: Platform): string {
-        return `dolittle/runtime:${platform.runtimeVersion}`;
     }
 }

@@ -3,7 +3,7 @@
 
 import { Constructor } from '@dolittle/rudiments';
 import { MicroserviceScenarioContext } from '@dolittle/aviator.gherkin';
-import { Platform } from '@dolittle/aviator.microservices';
+import { Infrastructure } from '@dolittle/aviator.microservices';
 import { ScenarioFor } from '@dolittle/testing.gherkin';
 
 import { PreflightChecklist } from './index';
@@ -23,5 +23,5 @@ export interface IPreflightPlanner {
      * @param {...Constructor<ScenarioFor<ScenarioContext>>[]} scenarios
      * @returns {Promise<PreflightChecklist>}
      */
-    createChecklistFor(platform: Platform, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<PreflightChecklist>
+    createChecklistFor(platform: Infrastructure, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<PreflightChecklist>
 }

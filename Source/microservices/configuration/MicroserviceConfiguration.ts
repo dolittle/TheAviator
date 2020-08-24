@@ -11,7 +11,7 @@ import {
     EventHorizonTenantConsentConfiguration,
     IMicroserviceHostsProvider
 } from './index';
-import { MicroserviceDefinition, Platform, shared } from '../index';
+import { MicroserviceDefinition, Infrastructure, shared } from '../index';
 
 /**
  * Represents the configuration of a microservice.
@@ -38,7 +38,7 @@ export class MicroserviceConfiguration {
     identifier: string;
 
     private constructor(
-        readonly platform: Platform,
+        readonly platform: Infrastructure,
         readonly name: string,
         identifier: Guid,
         tenants: Guid[],
@@ -85,7 +85,7 @@ export class MicroserviceConfiguration {
 
         this.eventStoreForTenants = this.tenants.map(tenant => new EventStoreTenantConfiguration(Guid.as(tenant.tenantId), hosts.mongo));
     }
-    static from(platform: Platform, definition: MicroserviceDefinition, hostsProvider: IMicroserviceHostsProvider) {
+    static from(platform: Infrastructure, definition: MicroserviceDefinition, hostsProvider: IMicroserviceHostsProvider) {
         const configuration = new MicroserviceConfiguration(platform, definition.name, definition.identifier, definition.tenants, hostsProvider);
         return configuration;
     }

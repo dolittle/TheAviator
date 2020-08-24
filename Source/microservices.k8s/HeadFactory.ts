@@ -1,7 +1,7 @@
 // Copyright (c) Dolittle. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import { IRunContext } from '@dolittle/aviator.k8s';
-import { MicroserviceConfiguration, Platform, IHeadFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
+import { MicroserviceConfiguration, Infrastructure, IHeadFactory, ConfigurationFiles } from '@dolittle/aviator.microservices';
 import { Guid } from '@dolittle/rudiments';
 
 import { MicroserviceComponentFactoryFor, Head } from './index';
@@ -26,7 +26,7 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
                     containers: [
                         {
                             name: this.type,
-                            image: this.getContainerImage(configuration.platform),
+                            image: configuration.platform.headImage,
                             ports: [
                                 {
                                     containerPort: MicroserviceConfiguration.headInteractionPort,
@@ -77,9 +77,5 @@ export class HeadFactory extends MicroserviceComponentFactoryFor<Head> implement
             }
         );
         return new Head(namespacedPod, configuration);
-    }
-
-    private getContainerImage(platform: Platform): string {
-        return `dolittle/integrationtests-head-${platform.language}:${platform.headVersion}`;
     }
 }

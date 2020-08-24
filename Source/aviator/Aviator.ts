@@ -8,7 +8,7 @@ import {
     MicroserviceFactory,
     IConfigurationManager,
     ConfigurationManager,
-    Platform,
+    Infrastructure,
     IHeadFactory,
     IRuntimeFactory,
     IMongoFactory
@@ -81,7 +81,7 @@ export class Aviator {
     readonly specificationConverter: ISpecificationConverter;
     readonly specificationResultConverter: ISpecificationResultConverter;
 
-    private constructor(readonly platform: Platform, readonly configuration: AviatorConfiguration) {
+    private constructor(readonly platform: Infrastructure, readonly configuration: AviatorConfiguration) {
         this.runContexts = new RunContexts();
         this.orchestrator = new Orchestrator(this.runContexts);
         this.serializer = new Serializer();
@@ -98,7 +98,7 @@ export class Aviator {
         this.scenarioResultConverter = new ScenarioResultConverter(this.specificationResultConverter);
     }
 
-    static getFor(platform: Platform, configuration: AviatorConfiguration) {
+    static getFor(platform: Infrastructure, configuration: AviatorConfiguration) {
         return new Aviator(platform, configuration);
     }
 
