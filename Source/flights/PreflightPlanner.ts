@@ -16,7 +16,7 @@ import {
     Scenario,
 } from '@dolittle/testing.gherkin';
 
-import { Platform } from '@dolittle/aviator.microservices';
+import { Infrastructure } from '@dolittle/aviator.microservices';
 
 import { IPreflightPlanner, PreflightChecklist } from './index';
 
@@ -33,7 +33,7 @@ export class PreflightPlanner implements IPreflightPlanner {
     }
 
     /** @inheritdoc */
-    async createChecklistFor(platform: Platform, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<PreflightChecklist> {
+    async createChecklistFor(platform: Infrastructure, ...scenarios: Constructor<ScenarioFor<MicroserviceScenarioContext>>[]): Promise<PreflightChecklist> {
         const scenarioEnvironmentsByContextType: Map<Constructor<MicroserviceScenarioContext>, MicroserviceScenarioEnvironment> = new Map();
         const scenarioContextsByContextType: Map<Constructor<MicroserviceScenarioContext>, MicroserviceScenarioContext> = new Map();
         const scenariosByEnvironments: Map<MicroserviceScenarioEnvironment, Scenario[]> = new Map();

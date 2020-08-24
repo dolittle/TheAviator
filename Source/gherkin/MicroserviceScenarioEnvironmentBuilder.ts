@@ -4,7 +4,7 @@
 import { ISerializer } from '@dolittle/serialization.json';
 import { ScenarioEnvironmentBuilder } from '@dolittle/testing.gherkin';
 import { IRunContext } from '@dolittle/aviator.k8s';
-import { IMicroserviceFactory, Microservice, Platform, MicroserviceConfiguration, IMicroserviceHostsProvider } from '@dolittle/aviator.microservices';
+import { IMicroserviceFactory, Microservice, Infrastructure, MicroserviceConfiguration, IMicroserviceHostsProvider } from '@dolittle/aviator.microservices';
 
 import { MicroserviceScenarioEnvironment, MicroserviceScenarioEnvironmentDefinition, GetMicroserviceScenarioDestination, GetMicroserviceDestination } from './index';
 import { Guid } from '@dolittle/rudiments';
@@ -21,7 +21,7 @@ export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentB
             super();
     }
 
-    async forPlatformAndDefinition(platform: Platform, definition: MicroserviceScenarioEnvironmentDefinition): Promise<MicroserviceScenarioEnvironmentBuilder> {
+    async forPlatformAndDefinition(platform: Infrastructure, definition: MicroserviceScenarioEnvironmentDefinition): Promise<MicroserviceScenarioEnvironmentBuilder> {
         this.definition = definition;
         const microservices: { [key: string]: Microservice } = {};
 
@@ -36,7 +36,7 @@ export class MicroserviceScenarioEnvironmentBuilder extends ScenarioEnvironmentB
     }
 
 
-    private prepareMicroserviceConfigurations(platform: Platform, definition: MicroserviceScenarioEnvironmentDefinition): {configuration: MicroserviceConfiguration, runningId: Guid}[] {
+    private prepareMicroserviceConfigurations(platform: Infrastructure, definition: MicroserviceScenarioEnvironmentDefinition): {configuration: MicroserviceConfiguration, runningId: Guid}[] {
         const configurationsAndIds: {configuration: MicroserviceConfiguration, runningId: Guid}[] = [];
         for (const microserviceDefinition of definition.microservices) {
             const configuration = MicroserviceConfiguration.from(platform, microserviceDefinition, this._microserviceHostsProvider);
